@@ -45,13 +45,32 @@ class ConfigController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  Kris\LaravelFormBuilder\FormBuilder  formBuilder
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(FormBuilder $formBuilder)
     {
         //
-        dd($request);
+        
+        $form = $formBuilder->create(\App\Forms\ConfigEmpresaForm::class);
+
+        if (!$form->isValid()) {
+            return redirect()->back()->withErrors($form->getErrors())->withInput();
+        }
+
+        $input = $form->getFieldValues();
+
+        $record = new Config;
+
+        $record->empresa    = $input['empresa'];
+        $record->cuit       = $input['cuit'];
+        $record->direccion  = $input['direccion'];
+        $record->telefono   = $input['telefono'];
+
+        $record->save();
+
+        return redirect()->route('config', 302);
+
     }
 
     /**
