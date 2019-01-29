@@ -14,6 +14,8 @@ class ConfigEmpresaForm extends Form
             ->add('empresa', Field::TEXT, ['rules'=>'required|min:3'])
             ->add('cuit', Field::TEXT, ['rules'=>'required'])
             ->add('direccion', Field::TEXTAREA, ['rules'=>'required|min:3|max:100'])
-            ->add('telefono', Field::TEXT, ['rules'=>'required']);
+            ->add('telefono', Field::TEXT, ['rules'=>'required'])
+            ->add('submit', 'submit', ['label' => 'Guardar'])
+            ->add('clear', 'reset', ['label' => 'Limpiar']);
     }
 }
