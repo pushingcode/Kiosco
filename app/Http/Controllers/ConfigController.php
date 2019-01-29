@@ -22,6 +22,8 @@ class ConfigController extends Controller
         if ($config->isEmpty()) {
             # la configuracon no se ha creado, enviammos un boton para conf
             $conf = false;
+        } else {
+            $conf = $config;
         }
         
         return view('admin.config', compact('conf'));
