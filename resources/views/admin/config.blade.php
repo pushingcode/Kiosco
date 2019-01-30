@@ -46,7 +46,7 @@
                 <td>
                     <div class="btn-group" role="group">
                         <a role="button" class="btn btn-primary" href="{{ url('admin/config/edit') }}/{{$empresa->id}}">Editar</a>
-                        <a role="button" class="btn btn-danger" href="#" data-toggle="modal" data-target="#deltOrder">Eliminar</a>
+                        <a id="delete-empresa" role="button" class="btn btn-danger" href="#" data-toggle="modal" data-target="#deltOrder" data-objetivo="{{$empresa->id}}" data-accion="eliminar">Eliminar</a>
                     </div>
                 </td>
             </tr>
@@ -65,11 +65,26 @@
                 </div>
                 <div class="modal-body">
                     <h4>Seguro desea eliminar la empresa!</h4>
+                    <p>Ingrese su Password para confirmar la accion</p>
                     {!! form($form) !!}
                 </div>
             
             </div>
         </div>
     </div>
+    <!-- Modal -->
+    
     @endif
+@stop
+
+@section('adminlte_js')
+    <script>
+    $(document).on("click", "#delete-empresa", function (){
+        var myEmpresa = $(this).data('objetivo');
+        var myAccion = $(this).data('accion');
+
+        $(".modal-body").find('input[name="objeto"]').val(myEmpresa);
+        $(".modal-body").find('input[name="accion"]').val(myAccion);
+    });
+    </script>
 @stop
