@@ -14,7 +14,7 @@ class ConfigController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(FormBuilder $formBuilder)
     {
         //verificamos que la empresa este configurada
         $config = Config::all();
@@ -22,11 +22,17 @@ class ConfigController extends Controller
         if ($config->isEmpty()) {
             # la configuracon no se ha creado, enviammos un boton para conf
             $conf = false;
+            $form = false;
         } else {
+            $id = "";
             $conf = $config;
+            $form = $formBuilder->create(\App\Forms\ConfirmActionForm::class, [
+                'method' => 'POST',
+                'url' => route('destroy.config', $id)
+            ]);
         }
         
-        return view('admin.config', compact('conf'));
+        return view('admin.config', compact('conf', 'form'));
     }
 
     /**
@@ -118,5 +124,6 @@ class ConfigController extends Controller
     public function destroy($id)
     {
         //
+        dd($id);
     }
 }

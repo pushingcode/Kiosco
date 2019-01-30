@@ -25,25 +25,51 @@
     <tbody>
         @foreach($conf as $empresa)
             <tr>
-            <th scope="row">{{ $empresa->id }}</th>
-            <td>{{ $empresa->empresa }}</td>
-            <td>{{ $empresa->cuit }}</td>
-            <td>{{ $empresa->telefono }}</td>
-            <td>
-            <div class="btn-group" role="group">
-            <a role="button" class="btn btn-primary" href="{{ url('admin/config/create') }}">Crear</a>
-            <a role="button" class="btn btn-danger" href="{{ url('admin/config/create') }}">ver</a>
-            </div>
-            </td>
-            <td>
-            <div class="btn-group" role="group">
-            <a role="button" class="btn btn-primary" href="{{ url('admin/config/create') }}">Editar</a>
-            <a role="button" class="btn btn-danger" href="{{ url('admin/config/create') }}">Eliminar</a>
-            </div>
-            </td>
+                <th scope="row">
+                    {{ $empresa->id }}
+                </th>
+                <td>
+                    {{ $empresa->empresa }}
+                </td>
+                <td>
+                    {{ $empresa->cuit }}
+                </td>
+                <td>
+                    {{ $empresa->telefono }}
+                </td>
+                <td>
+                    <div class="btn-group" role="group">
+                        <a role="button" class="btn btn-primary" href="{{ url('admin/config/create') }}">Crear</a>
+                        <a role="button" class="btn btn-danger" href="{{ url('admin/config/create') }}">ver</a>
+                    </div>
+                </td>
+                <td>
+                    <div class="btn-group" role="group">
+                        <a role="button" class="btn btn-primary" href="{{ url('admin/config/edit') }}/{{$empresa->id}}">Editar</a>
+                        <a role="button" class="btn btn-danger" href="#" data-toggle="modal" data-target="#deltOrder">Eliminar</a>
+                    </div>
+                </td>
             </tr>
         @endforeach
     </tbody>
     </table>
+    <!-- Modal -->
+    <div class="modal fade" id="deltOrder" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title" id="exampleModalLabel">Verificacion Requerida</h3>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <h4>Seguro desea eliminar la empresa!</h4>
+                    {!! form($form) !!}
+                </div>
+            
+            </div>
+        </div>
+    </div>
     @endif
 @stop
