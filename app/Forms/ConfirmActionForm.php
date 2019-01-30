@@ -6,6 +6,8 @@ use Kris\LaravelFormBuilder\Form;
 
 class ConfirmActionForm extends Form
 {
+    //protected $name = 'DeleteEmpresa';
+
     public function buildForm()
     {
         // Add fields here...
@@ -17,6 +19,9 @@ class ConfirmActionForm extends Form
             ->add('accion', 'hidden', [
                 'value' => 'n/a',
                 'attr' => ['id' => 'accion']
+                ])
+                ->add('_method', 'hidden', [
+                    'value' => 'DELETE'
                 ])
             ->add('password', 'password', ['rules'=>'required'])
             ->add('submit', 'submit', [

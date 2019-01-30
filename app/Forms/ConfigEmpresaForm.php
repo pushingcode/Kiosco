@@ -12,7 +12,7 @@ class ConfigEmpresaForm extends Form
         // Add fields here...
         $this
             ->add('empresa', Field::TEXT, ['rules'=>'required|min:3'])
-            ->add('cuit', Field::TEXT, ['rules'=>'required|unique'])
+            ->add('cuit', Field::TEXT, ['rules'=>'required'])
             ->add('direccion', Field::TEXTAREA, ['rules'=>'required|min:3|max:100'])
             ->add('telefono', Field::TEXT, ['rules'=>'required'])
             ->add('submit', 'submit', ['label' => 'Guardar'])

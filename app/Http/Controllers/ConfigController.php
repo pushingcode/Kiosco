@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Kris\LaravelFormBuilder\FormBuilder;
 
 use App\Config;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 
 class ConfigController extends Controller
 {
@@ -28,7 +30,7 @@ class ConfigController extends Controller
             $conf = $config;
             $form = $formBuilder->create(\App\Forms\ConfirmActionForm::class, [
                 'method' => 'POST',
-                'url' => route('destroy.config', $id)
+                'url' => ''
             ]);
         }
         
@@ -101,6 +103,7 @@ class ConfigController extends Controller
     public function edit($id)
     {
         //
+        dd($id);
     }
 
     /**
@@ -121,9 +124,25 @@ class ConfigController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(FormBuilder $formBuilder, $id)
     {
         //
-        dd($id);
+
+        $form = $formBuilder->create(\App\Forms\ConfirmActionForm::class);
+
+        if (!$form->isValid()) {
+            return redirect()->back()->withErrors($form->getErrors())->withInput();
+        }
+
+        $input = $form->getFieldValues();
+
+        if (!Hash::check($input['password'], Auth::user()->password)) {
+            return redirect()->back()->withErrors('Password Incorrecto');
+        }
+
+        // espacio para capturar accion
+        Config::destroy($id);
+
+        return redirect()->back()->with('Empresa eliminada!!!');
     }
 }

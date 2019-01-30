@@ -7,7 +7,11 @@
 @stop
 
 @section('content')
-    <p></p>
+
+    @if($errors->any())
+    <h4>{{$errors->first()}}</h4>
+    @endif
+
     @if ($conf === false)
     <p><a href="{{ url('admin/config/create') }}">Crear Configuracion Inicial</a></p>
     @else
@@ -46,7 +50,7 @@
                 <td>
                     <div class="btn-group" role="group">
                         <a role="button" class="btn btn-primary" href="{{ url('admin/config/edit') }}/{{$empresa->id}}">Editar</a>
-                        <a id="delete-empresa" role="button" class="btn btn-danger" href="#" data-toggle="modal" data-target="#deltOrder" data-objetivo="{{$empresa->id}}" data-accion="eliminar">Eliminar</a>
+                        <a id="delete-empresa" role="button" class="btn btn-danger" href="#" data-toggle="modal" data-target="#deltOrder" data-objetivo="{{$empresa->id}}" data-accion="{{ url('admin/config/destroy') }}/{{$empresa->id}}">Eliminar</a>
                     </div>
                 </td>
             </tr>
@@ -79,10 +83,11 @@
 
 @section('adminlte_js')
     <script>
-    $(document).on("click", "#delete-empresa", function (){
+    $(document).on("click", "#delete-empresa", function (e){
+        e.preventDefault();
         var myEmpresa = $(this).data('objetivo');
         var myAccion = $(this).data('accion');
-
+        $('form').attr('action', myAccion);
         $(".modal-body").find('input[name="objeto"]').val(myEmpresa);
         $(".modal-body").find('input[name="accion"]').val(myAccion);
     });

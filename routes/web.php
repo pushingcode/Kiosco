@@ -21,5 +21,6 @@ Route::get('/home', 'HomeController@index')->name('home');
 //Route::view('/admin/config', 'admin.config');
 Route::get('/admin/config', 'ConfigController@index')->name('config');
 Route::get('/admin/config/create', 'ConfigController@create')->name('create.config');
+Route::get('/admin/config/edit/{id}', 'ConfigController@create')->name('edit.config');
 Route::post('/admin/config/store', 'ConfigController@store')->name('store.config');
 Route::delete('/admin/config/destroy/{id}', 'ConfigController@destroy')->name('destroy.config');
