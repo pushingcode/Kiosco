@@ -4,11 +4,10 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Config extends Model
+class Ejercicio extends Model
 {
     //
-    
-    protected $table = 'configs';
+    protected $table = 'ejercicios';
 
     protected $dates = [
         'created_at',

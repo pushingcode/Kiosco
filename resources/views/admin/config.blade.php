@@ -42,15 +42,12 @@
                     {{ $empresa->telefono }}
                 </td>
                 <td>
-                    <div class="btn-group" role="group">
-                        <a role="button" class="btn btn-primary" href="{{ url('admin/config/create') }}">Crear</a>
-                        <a role="button" class="btn btn-danger" href="{{ url('admin/config/create') }}">ver</a>
-                    </div>
+                    {!! form($fisc) !!}
                 </td>
                 <td>
                     <div class="btn-group" role="group">
-                        <a role="button" class="btn btn-primary" href="{{ url('admin/config/edit') }}/{{$empresa->id}}">Editar</a>
-                        <a id="delete-empresa" role="button" class="btn btn-danger" href="#" data-toggle="modal" data-target="#deltOrder" data-objetivo="{{$empresa->id}}" data-accion="{{ url('admin/config/destroy') }}/{{$empresa->id}}">Eliminar</a>
+                        <a role="button" class="btn btn-primary btn-sm" href="{{ url('admin/config/edit') }}/{{$empresa->id}}">Editar</a>
+                        <a id="delete-empresa" role="button" class="btn btn-danger btn-sm" href="#" data-toggle="modal" data-target="#deltOrder" data-objetivo="{{$empresa->id}}" data-accion="{{ url('admin/config/destroy') }}/{{$empresa->id}}">Eliminar</a>
                     </div>
                 </td>
             </tr>

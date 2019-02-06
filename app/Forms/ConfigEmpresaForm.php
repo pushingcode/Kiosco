@@ -17,5 +17,12 @@ class ConfigEmpresaForm extends Form
             ->add('telefono', Field::TEXT, ['rules'=>'required'])
             ->add('submit', 'submit', ['label' => 'Guardar'])
             ->add('clear', 'reset', ['label' => 'Limpiar']);
+
+            //verificamos si is_update existe
+            if ($this->getData('is_update') === true) {
+                $this->add('_method', 'hidden', [
+                    'value' => 'PUT'
+                ]);
+            }
     }
 }
