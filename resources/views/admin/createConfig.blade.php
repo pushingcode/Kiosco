@@ -7,6 +7,37 @@
 @stop
 
 @section('content')
-    <p>You are logged in!</p>
-    {!! form($form) !!}
+    
+    <div class="row">
+        <div class="col-sm-8">
+
+        {!! form($form) !!}
+
+        </div>
+        <div class="col-sm-4">
+        <h3>Dato importante</h3>
+        @isset($decript)
+            <p>{{ $decript }}</p>
+        @endisset
+
+        </div>
+    </div>
+
+
 @stop
+
+@section('adminlte_js')
+    <script>
+    /*
+    * ajuste de 12 meses para el form
+    */
+        $("#inicio").change(function(){
+            var inicio = new Date($(this).val());
+            inicio.setMonth(13);
+            var fin = new Date(inicio);
+            var fin = fin.toISOString().slice(0,10);
+            $("#fin").val(fin);
+        });
+    </script>
+@stop
+  

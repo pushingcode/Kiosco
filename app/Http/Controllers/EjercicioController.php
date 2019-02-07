@@ -41,7 +41,7 @@ class EjercicioController extends Controller
 
         $input = $form->getFieldValues();
         $model = Config::find($input['conf']);
-        //dd($model);
+        
         unset($form);
         
         $form = $formBuilder->create(\App\Forms\NuevoEjerForm::class, [
@@ -50,7 +50,12 @@ class EjercicioController extends Controller
             'url' => route('ejercicio.store')
         ]);
 
-        return view('admin.createConfig', compact('form'));
+        $decript = 'Segun la ley, las actividades economicas regulares 
+        deberan estar comprendidos en un periodo de 12 meses continuos,
+         de lo contrario se considera una actividad irregular. 
+         Consulte con su contador para escoger la forma que mas le convenga';
+
+        return view('admin.createConfig', compact('form', 'decript'));
 
     }
 
