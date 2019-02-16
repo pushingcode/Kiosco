@@ -42,7 +42,14 @@
                     {{ $empresa->telefono }}
                 </td>
                 <td>
-                    {!! form($fisc) !!}
+                    @if($fisc === false)
+                        <div class="btn-group" role="group">
+                            <a role="button" class="btn btn-primary btn-sm" href="#">Ver Actual</a>
+                            <a role="button" class="btn btn-info btn-sm" href="{{ url('/ejercicio') }}">Historicos</a>
+                        </div>
+                    @else
+                        {!! form($fisc) !!}
+                    @endif
                 </td>
                 <td>
                     <div class="btn-group" role="group">

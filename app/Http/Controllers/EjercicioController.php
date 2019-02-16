@@ -21,6 +21,9 @@ class EjercicioController extends Controller
     public function index()
     {
         //
+        $ejercicios = Ejercicio::all();
+        //dd($ejercicios);
+        return view('admin.viewEjercicios', compact('ejercicios'));
     }
 
     /**
@@ -67,7 +70,42 @@ class EjercicioController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $user = User::find(Auth::id());
+        if (!$user->can('crear-ejercicio')) {
+            return redirect()->back()->withErrors('Permisos insuficientes');
+        }
+
+        //$form = $formBuilder->create(\App\Forms\NuevoEjerForm::class);
+
+        //if (!$form->isValid()) {
+         //   return redirect()->back()->withErrors($form->getErrors())->withInput();
+        //}
+
+        //$input = $form->getFieldValues();
+        //validamos si existen periodos abiertos
+        //validamos si el periodo abierto esta en posibilidad de cierre
+
+        $ejercicio = Ejercicio::where('estado', '=', 'abierto')->get();
+        if ($ejercicio->isEmpty()) {
+            //no existe ninguno abierto
+            //creamos el ejercicio nuevo
+            $ejercicio = new Ejercicio();
+
+            $ejercicio->conf_id     = $request->conf;
+            $ejercicio->inicio      = $request->inicio;
+            $ejercicio->fin         = $request->fin;
+            $ejercicio->tipo        = $request->tipo;
+            $ejercicio->estado      = $request->estado;
+
+            $ejercicio->save();
+            return redirect()
+            ->back()
+            ->with('creado ejercicio de '. $request->inicio .' al '. $request->fin);
+            
+        } else {
+            # code...
+        }
+
     }
 
     /**

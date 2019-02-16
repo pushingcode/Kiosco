@@ -20,10 +20,10 @@ class ConFiscForm extends Form
             ]);
         }
 
-        if ($this->getData('accion') == 'gestionar') {
+        if ($this->getData('accion') == 'cerrar') {
             $this->add('submit', 'submit', [
                 'attr' => ['class' => 'btn btn-warning btn-sm'],
-                'label' => 'Ver/Cerrar'
+                'label' => 'Cerrar'
             ]);
         }
     }

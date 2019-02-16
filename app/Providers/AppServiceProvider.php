@@ -29,7 +29,7 @@ class AppServiceProvider extends ServiceProvider
                     'can'           => 'crear-ejercicio',
                 ]);
             } else {
-                $event->menu->add('INICIO');
+                $event->menu->add('EMPRESA');
                 $event->menu->add([
                     'text'          => 'Configuracion',
                     'url'           => 'admin/config',

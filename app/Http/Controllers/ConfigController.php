@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Auth\Access\Gate;
 use App\User;
 use App\Ejercicio;
+use Carbon\Carbon;
 
 class ConfigController extends Controller
 {
@@ -22,52 +23,72 @@ class ConfigController extends Controller
     public function index(FormBuilder $formBuilder)
     {
         $user = User::find(Auth::id());
-        //verificamos que la empresa este configurada
-        $config = Config::all();
-        foreach ($config as $cfgs){
-            $myconfig = $cfgs->id;
-        }
         
-        //dd($config->isEmpty());
+        //verificamos que si existe empresa configurada
+        $config = Config::all();
         if ($config->isEmpty()) {
-            // la configuracon no se ha creado, enviammos un boton para conf
+            //no esta configurada enviamos al boton
             $conf = false;
             $form = false;
             $fisc = false;
         } else {
-            //verificamos si existe un ejercicio activo para la empresa
-            $ejer = Ejercicio::all();//////////////////////////////
-            if ($ejer->IsEmpty()) {
-                //empresa creada sin ejercicio
-                //enviamos los datos para un link
-                if ($user->can('crear-ejercicio')) {
-                    //enviamos form ConFiscForm
+            //$fisc = false;
+            //verificamos que la empresa posee ejercicio
+            $myconfig = $config->toArray();
+            $ejer = Ejercicio::all();
+            if ($ejer->isEmpty()) {
+
+                $fisc = $formBuilder->create(\App\Forms\ConFiscForm::class, [
+                    'method' => 'GET',
+                    'url' => route('ejercicio.create', $myconfig['id']),
+                ], [
+                    'accion' => 'crear',
+                    'fiscal' => $myconfig['id']
+                    ]);
+            } else {
+                $fisc = false;
+                //empresa creada con ejercicio
+                //paso1 cargamos el ultimo ejercicio
+                //paso2 verificamos si esta abierto
+                //paso3 verificamos si esta en fecha para cierre
+                //control
+                if (!$user->can('crear-ejercicio')) {
+                    //redirect a forbidden
+                    return view('error.forbidden');
+                }
+                $ejercicio = Ejercicio::orderBy('created_at', 'desc')->first(); // paso1
+                $fisco = $ejercicio->toArray();
+
+                if (!$fisco['estado'] == 'abierto') { //paso2
+                    //enviamos form para crear uno
                     $fisc = $formBuilder->create(\App\Forms\ConFiscForm::class, [
                         'method' => 'GET',
-                        'url' => route('ejercicio.create', $myconfig),
+                        'url' => route('ejercicio.create', $fisco['id']),
                     ], [
                         'accion' => 'crear',
-                        'fiscal' => $myconfig
+                        'fiscal' => $fisco['id']
                         ]);
-                    
-                } else {
-                    $fisc = 'no posee los permisos';
                 }
-            } else {
-                //empresa creada con ejercicio
-                //cargamos el ultimo ejercicio
-                //verificamos si esta activo
-                //verificamos si esta en fecha para cierre
-            }
 
-            $id   = "";
+                $date = Carbon::parse($fisco['fin']);
+                if ($date->isPast()) { //paso3
+                    //enviamos form para cerrar
+                    $fisc = $formBuilder->create(\App\Forms\ConFiscForm::class, [
+                        'method' => 'GET',
+                        'url' => route('ejercicio.update', $fisco['id']),
+                    ], [
+                        'accion' => 'cerrar',
+                        'fiscal' => $fisco['id']
+                        ]);
+                }
+            }
             $conf = $config;
             $form = $formBuilder->create(\App\Forms\ConfirmActionForm::class, [
                 'method' => 'POST',
                 'url' => '' //se deja vacio porque se trabajara con JQuery
             ]);
         }
-        //dd($fisc);
+
         return view('admin.config', compact('fisc', 'conf', 'form'));
     }
 
@@ -96,7 +117,7 @@ class ConfigController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  Kris\LaravelFormBuilder\FormBuilder  formBuilder
+     * @param  \Kris\LaravelFormBuilder\FormBuilder  formBuilder
      * @return \Illuminate\Http\Response
      */
     public function store(FormBuilder $formBuilder)
