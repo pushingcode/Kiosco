@@ -11,7 +11,7 @@ class NuevoEjerForm extends Form
     {
         $this
         ->add('conf', Field::HIDDEN, [
-            'value' => $this->getModel()->id
+            'value' => $this->getData('model')
         ])
         ->add('inicio', Field::DATE, [
             'rules' => 'required'

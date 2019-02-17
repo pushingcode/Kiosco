@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Auth\Access\Gate;
 use Kris\LaravelFormBuilder\FormBuilder;
+use Illuminate\Support\Carbon;
 
 class EjercicioController extends Controller
 {
@@ -18,12 +19,17 @@ class EjercicioController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(FormBuilder $formBuilder)
     {
         //
         $ejercicios = Ejercicio::all();
         //dd($ejercicios);
-        return view('admin.viewEjercicios', compact('ejercicios'));
+        $form = $formBuilder->create(\App\Forms\ConfirmActionForm::class, [
+            'method' => 'POST',
+            'url' => '' //se deja vacio porque se trabajara con JQuery
+        ]);
+
+        return view('admin.viewEjercicios', compact('ejercicios', 'form'));
     }
 
     /**
@@ -40,17 +46,15 @@ class EjercicioController extends Controller
             return redirect()->back()->withErrors('Permisos insuficientes');
         }
 
-        $form = $formBuilder->create(\App\Forms\ConFiscForm::class);
+        $model = Config::firstOrFail();
 
-        $input = $form->getFieldValues();
-        $model = Config::find($input['conf']);
-        
-        unset($form);
+        $model = $model->toArray();
         
         $form = $formBuilder->create(\App\Forms\NuevoEjerForm::class, [
-            'method' => 'POST',
-            'model' => $model,
-            'url' => route('ejercicio.store')
+            'method'    => 'POST',
+            'url'       => route('ejercicio.store')
+        ], [
+            'model'     => $model['id']
         ]);
 
         $decript = 'Segun la ley, las actividades economicas regulares 
@@ -148,8 +152,36 @@ class EjercicioController extends Controller
      * @param  \App\Ejercicio  $ejercicio
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Ejercicio $ejercicio)
+    public function destroy(FormBuilder $formBuilder, Ejercicio $ejercicio)
     {
         //
+        $user = User::find(Auth::id());
+        if (!$user->can('eliminar-empresa')) {
+            return redirect()->back()->withErrors('Permisos insuficientes');
+        }
+
+        $form = $formBuilder->create(\App\Forms\ConfirmActionForm::class);
+
+        if (!$form->isValid()) {
+            return redirect()->back()->withErrors($form->getErrors())->withInput();
+        }
+
+        $input = $form->getFieldValues();
+
+        if (!Hash::check($input['password'], Auth::user()->password)) {
+            return redirect()->back()->withErrors('Password Incorrecto');
+        }
+        $date = Carbon::parse($ejercicio->fin);
+
+        if (!$date->isPast()) {
+            $ejercicio->tipo = 'irregular';
+        }
+
+        $ejercicio->estado = 'cerrado';
+        $ejercicio->save();
+
+        return redirect()
+        ->route('ejercicio', 302)
+        ->with('Ejercicio economico '.$ejercicio->inicio.' cerrado de forma '. $ejercicio->tipo);
     }
 }

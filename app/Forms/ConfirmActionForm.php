@@ -26,7 +26,7 @@ class ConfirmActionForm extends Form
             ->add('password', 'password', ['rules'=>'required'])
             ->add('submit', 'submit', [
                 'attr'=>['class' => 'btn btn-danger'], 
-                'label' => 'Eliminar'
+                'label' => 'Procesar'
                 ])
             ->add('clear', 'reset', [
                 'attr'=>['class' => 'btn btn-light', 'data-dismiss' => 'modal'],

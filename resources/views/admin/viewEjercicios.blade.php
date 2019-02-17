@@ -28,7 +28,7 @@
             <td>Estadisticas ejercicio</td>
             <td>
                 @if($ejercicio->estado === 'abierto')
-                <a role="button" class="btn btn-info btn-sm" href="#">Cerrar</a>
+                <a id="cerrar-ejercicio" role="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#deltFisc" data-objetivo="{{ $ejercicio->id }}" data-accion="{{ url('ejercicio/'. $ejercicio->id ) }}" href="#">Cerrar</a>
                 @else
                 CERRADO
                 @endif
@@ -37,10 +37,37 @@
         @endforeach
         </tbody>
     </table>
+    <!-- Modal -->
+    <div class="modal fade" id="deltFisc" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title" id="exampleModalLabel">Verificacion Requerida</h3>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <h4>Esta por cerrar este Ejercicio Economico!</h4>
+                    <p>Ingrese su Password para confirmar la accion</p>
+                    {!! form($form) !!}
+                </div>
+            
+            </div>
+        </div>
+    </div>
+    <!-- Modal -->
 @stop
 
 @section('adminlte_js')
-    <script>
-        //void
+<script>
+    $(document).on("click", "#cerrar-ejercicio", function (e){
+        e.preventDefault();
+        var myEmpresa = $(this).data('objetivo');
+        var myAccion = $(this).data('accion');
+        $('form').attr('action', myAccion);
+        $(".modal-body").find('input[name="objeto"]').val(myEmpresa);
+        $(".modal-body").find('input[name="accion"]').val(myAccion);
+    });
     </script>
 @stop
