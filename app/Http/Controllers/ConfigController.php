@@ -74,8 +74,8 @@ class ConfigController extends Controller
                 if ($date->isPast()) { //paso3
                     //enviamos form para cerrar
                     $fisc = $formBuilder->create(\App\Forms\ConFiscForm::class, [
-                        'method' => 'GET',
-                        'url' => route('ejercicio.update', $fisco['id']),
+                        'method'    => 'GET',
+                        'url'       => route('ejercicio.update', $fisco['id']),
                     ], [
                         'accion' => 'cerrar',
                         'fiscal' => $fisco['id']
@@ -84,8 +84,8 @@ class ConfigController extends Controller
             }
             $conf = $config;
             $form = $formBuilder->create(\App\Forms\ConfirmActionForm::class, [
-                'method' => 'POST',
-                'url' => '' //se deja vacio porque se trabajara con JQuery
+                'method'    => 'POST',
+                'url'       => '' //se deja vacio porque se trabajara con JQuery
             ]);
         }
 

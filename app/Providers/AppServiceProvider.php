@@ -7,6 +7,7 @@ use Illuminate\Support\ServiceProvider;
 use App\Config;
 use App\Ejercicio;
 use Carbon\Carbon;
+use App\Almacen;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -38,6 +39,24 @@ class AppServiceProvider extends ServiceProvider
                     'icon_color'    => 'green',
                     'can'           => 'crear-empresa',
                 ]);
+                //seccion de almacen
+                $almacen = Almacen::all();
+                if ($almacen->isEmpty()) {
+                    $event->menu->add([
+                        'text'          => 'Crear Almacen',
+                        'url'           => 'almacen/create',
+                        'icon_color'    => 'red',
+                        'can'           => 'crear-empresa',
+                    ]);
+                } else {
+                    $event->menu->add([
+                        'text'          => 'Almacenes',
+                        'url'           => '/almacen',
+                        'icon_color'    => 'green',
+                        'can'           => 'crear-empresa',
+                    ]);
+                }
+                
                 //verificamos si existe un ejercicio y creamos el menu
                 $fisc = Ejercicio::all();
                 if ($fisc->isEmpty()) {
@@ -79,6 +98,19 @@ class AppServiceProvider extends ServiceProvider
                             'url'           => '/ejercicio',
                             'icon_color'    => 'green',
                             'can'           => 'crear-ejercicio',
+                        ]);
+                        $event->menu->add('ENTRADAS');
+                        $event->menu->add([
+                            'text'          => 'Compras',
+                            'url'           => '#',
+                            'icon_color'    => 'aqua',
+                            'can'           => 'crear-compra',
+                        ]);
+                        $event->menu->add([
+                            'text'          => 'Devolucion',
+                            'url'           => '#',
+                            'icon_color'    => 'black',
+                            'can'           => 'editar-factura',
                         ]);
                     }
                 }
