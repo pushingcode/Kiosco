@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Kris\LaravelFormBuilder\FormBuilder;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use App\User;
 use App\Config;
 use App\Almacen;
@@ -16,9 +17,17 @@ class AlmacenController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(FormBuilder $formBuilder)
     {
         //
+        $almacenes = Almacen::all();
+
+        $form = $formBuilder->create(\App\Forms\ConfirmActionForm::class, [
+            'method'    => 'POST',
+            'url'       => '' //se deja vacio porque se trabajara con JQuery
+        ]);
+
+        return view('admin.almacenes', compact('almacenes', 'form'));
     }
 
     /**
@@ -37,15 +46,14 @@ class AlmacenController extends Controller
         $store = Config::first();
         $myStore = $store->toArray();
         $storage = Almacen::all();
-        $cod = "1";
+
         if ($storage->isEmpty()) {
-            $codigo = str_pad($cod, 4, "0", STR_PAD_LEFT);
+            $codigo = str_pad(1, 5, "0", STR_PAD_LEFT);
         } else {
-            $cod = strlen($storage->count() + 1);
-            $fill = 5 - $cod;
-            $codigo = str_pad($cod, $fill, "0", STR_PAD_LEFT);
+            $cod = $storage->count() + 1;
+            $codigo = str_pad($cod, 5, "0", STR_PAD_LEFT);
         }
-        
+
         $form = $formBuilder->create(\App\Forms\NuevoAlmacenForm::class, [
             'method' => 'POST',
             'url' => route('almacen.store')
@@ -84,7 +92,7 @@ class AlmacenController extends Controller
 
         $record->save();
 
-        return redirect()->route('/almacen', 302);
+        return redirect()->route('almacen.index', 302);
     }
 
     /**
@@ -127,8 +135,29 @@ class AlmacenController extends Controller
      * @param  \App\Almacen  $almacen
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Almacen $almacen)
+    public function destroy(Almacen $almacen, FormBuilder $formBuilder)
     {
         //
+        
+        $user = User::find(Auth::id());
+        if (!$user->can('eliminar-empresa')) {
+            return redirect()->back()->withErrors('Permisos insuficientes');
+        }
+
+        $form = $formBuilder->create(\App\Forms\ConfirmActionForm::class);
+
+        if (!$form->isValid()) {
+            return redirect()->back()->withErrors($form->getErrors())->withInput();
+        }
+
+        $input = $form->getFieldValues();
+
+        if (!Hash::check($input['password'], Auth::user()->password)) {
+            return redirect()->back()->withErrors('Password Incorrecto');
+        }
+
+        $almacen->estado = 'inactivo';
+        $almacen->save();
+        return redirect()->route('almacen.index', 302);
     }
 }
