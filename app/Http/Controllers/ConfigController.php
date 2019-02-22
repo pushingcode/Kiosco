@@ -12,6 +12,7 @@ use Illuminate\Auth\Access\Gate;
 use App\User;
 use App\Ejercicio;
 use Carbon\Carbon;
+use Spatie\Activitylog\Models\Activity;
 
 class ConfigController extends Controller
 {
@@ -23,7 +24,6 @@ class ConfigController extends Controller
     public function index(FormBuilder $formBuilder)
     {
         $user = User::find(Auth::id());
-        
         //verificamos que si existe empresa configurada
         $config = Config::all();
         if ($config->isEmpty()) {

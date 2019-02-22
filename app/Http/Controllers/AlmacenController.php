@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Kris\LaravelFormBuilder\FormBuilder;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Spatie\Activitylog\Contracts\Activity;
 use App\User;
 use App\Config;
 use App\Almacen;
@@ -75,6 +76,7 @@ class AlmacenController extends Controller
     public function store(FormBuilder $formBuilder)
     {
         //
+        $user = User::find(Auth::id());
         $form = $formBuilder->create(\App\Forms\NuevoAlmacenForm::class);
 
         if (!$form->isValid()) {
@@ -91,6 +93,12 @@ class AlmacenController extends Controller
         $record->estado = $input['estado'];
 
         $record->save();
+
+        activity('success')
+        ->performedOn($record)
+        ->causedBy($user)
+        ->withProperties(['accion' => 'crear-almacen'])
+        ->log('Nuevo almacen creado');
 
         return redirect()->route('almacen.index', 302);
     }
@@ -153,11 +161,25 @@ class AlmacenController extends Controller
         $input = $form->getFieldValues();
 
         if (!Hash::check($input['password'], Auth::user()->password)) {
+
+            activity('danger')
+            ->performedOn($almacen)
+            ->causedBy($user)
+            ->withProperties(['accion' => 'validar cierre Almacen'])
+            ->log('Validacion NO aprobada');
+
             return redirect()->back()->withErrors('Password Incorrecto');
         }
 
         $almacen->estado = 'inactivo';
         $almacen->save();
+
+        activity('warning')
+        ->performedOn($almacen)
+        ->causedBy($user)
+        ->withProperties(['accion' => 'cerrar-Almacen'])
+        ->log('Almacen Cerrado');
+
         return redirect()->route('almacen.index', 302);
     }
 }

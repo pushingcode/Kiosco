@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class HomeController extends Controller
 {
@@ -23,6 +24,12 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        
+        $activity = DB::table('activity_log')
+        ->join('users', 'activity_log.causer_id', '=', 'users.id')
+        ->select('activity_log.*', 'users.name AS name')
+        ->get();
+
+        return view('home', compact('activity'));
     }
 }
