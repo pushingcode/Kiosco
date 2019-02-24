@@ -29,4 +29,7 @@ Route::delete('/admin/config/destroy/{id}', 'ConfigController@destroy')->name('d
 Route::resources([
     'ejercicio' => 'EjercicioController',
     'almacen'   => 'AlmacenController',
+    'unidad'    => 'UnidadController',
+    'categoria' => 'CategoriaController',
+    'producto'  => 'ProductoController',
 ]);
