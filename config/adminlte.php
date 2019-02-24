@@ -108,7 +108,7 @@ return [
     */
 
     'menu' => [
-        'INICIO',
+        /*'INICIO',
         [
             'text' => 'Configuracion',
             'url'  => 'admin/config',
@@ -120,7 +120,7 @@ return [
             'icon'        => 'file',
             'label'       => 4,
             'label_color' => 'success',
-        ],
+        ],*/
         'ACCOUNT SETTINGS',
         [
             'text' => 'Profile',

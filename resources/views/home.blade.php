@@ -35,7 +35,9 @@
     <td>
         @php
             $data = json_decode($actividad->properties, true);
-            echo $data['accion'];
+            foreach($data as $key => $value){
+                echo $key.": ".$value."<br>";
+            }
         @endphp
     </td>
     <td>

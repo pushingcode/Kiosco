@@ -28,16 +28,34 @@ class AppServiceProvider extends ServiceProvider
                 $event->menu->add([
                     'text'          => 'Configuracion',
                     'url'           => 'admin/config',
+                    'icon'          => 'tools',
                     'icon_color'    => 'red',
                     'can'           => 'crear-empresa',
                 ]);
             } else {
                 $event->menu->add('EMPRESA');
                 $event->menu->add([
-                    'text'          => 'Configuracion',
-                    'url'           => 'admin/config',
+                    'text'          => 'Ajustes',
+                    'icon'          => 'tools',
                     'icon_color'    => 'green',
-                    'can'           => 'crear-empresa',
+                    'submenu'       => [
+                        [
+                            'text'          => 'Configuracion',
+                            'url'           => 'admin/config',
+                            'icon'          => 'tools',
+                            'can'           => 'crear-empresa'
+                        ],
+                        [
+                            'text'  => 'Impuestos',
+                            'url'   => '#',
+                            'icon'  => 'percent'
+                        ],
+                        [
+                            'text'  => 'Ganacias',
+                            'url'   => '#',
+                            'icon'  => 'hand-holding-usd'
+                        ]
+                    ]
                 ]);
                 //seccion de almacen
                 $almacen = Almacen::all();
@@ -45,6 +63,7 @@ class AppServiceProvider extends ServiceProvider
                     $event->menu->add([
                         'text'          => 'Crear Almacen',
                         'url'           => 'almacen/create',
+                        'icon'          => 'warehouse',
                         'icon_color'    => 'red',
                         'can'           => 'crear-empresa',
                     ]);
@@ -52,6 +71,7 @@ class AppServiceProvider extends ServiceProvider
                     $event->menu->add([
                         'text'          => 'Almacenes',
                         'url'           => '/almacen',
+                        'icon'          => 'warehouse',
                         'icon_color'    => 'green',
                         'can'           => 'crear-empresa',
                     ]);
@@ -63,6 +83,7 @@ class AppServiceProvider extends ServiceProvider
                     $event->menu->add([
                         'text'          => 'Ejercicio',
                         'url'           => 'ejercicio/create',
+                        'icon'          => 'calendar-alt',
                         'icon_color'    => 'red',
                         'can'           => 'crear-ejercicio',
                     ]);
@@ -78,6 +99,7 @@ class AppServiceProvider extends ServiceProvider
                         $event->menu->add([
                             'text'          => 'Ejercicio',
                             'url'           => 'ejercicio/"' .$fisco['id']. '"/edit',
+                            'icon'          => 'calendar-alt',
                             'icon_color'    => 'yellow',
                             'can'           => 'editar-ejercicio',
                         ]);
@@ -87,6 +109,7 @@ class AppServiceProvider extends ServiceProvider
                         $event->menu->add([
                             'text'          => 'Ejercicio',
                             'url'           => 'ejercicio/create',
+                            'icon'          => 'calendar-alt',
                             'icon_color'    => 'yellow',
                             'can'           => 'crear-ejercicio',
                         ]);
@@ -96,20 +119,45 @@ class AppServiceProvider extends ServiceProvider
                         $event->menu->add([
                             'text'          => 'Ejercicio',
                             'url'           => '/ejercicio',
+                            'icon'          => 'calendar-alt',
                             'icon_color'    => 'green',
                             'can'           => 'crear-ejercicio',
+                        ]);
+                        $event->menu->add('PRODUCTOS');
+                        $event->menu->add([
+                            'text'          => 'Categorias',
+                            'url'           => 'categoria',
+                            'icon'          => 'star',
+                            'icon_color'    => 'aqua',
+                            'can'           => 'crear-producto',
+                        ]);
+                        $event->menu->add([
+                            'text'          => 'Crear Unidades',
+                            'url'           => '#',
+                            'icon'          => 'boxes',
+                            'icon_color'    => 'aqua',
+                            'can'           => 'crear-producto',
+                        ]);
+                        $event->menu->add([
+                            'text'          => 'Crear Producto',
+                            'url'           => '#',
+                            'icon'          => 'box',
+                            'icon_color'    => 'aqua',
+                            'can'           => 'crear-producto',
                         ]);
                         $event->menu->add('ENTRADAS');
                         $event->menu->add([
                             'text'          => 'Compras',
                             'url'           => '#',
+                            'icon'          => 'cart-plus',
                             'icon_color'    => 'aqua',
                             'can'           => 'crear-compra',
                         ]);
                         $event->menu->add([
                             'text'          => 'Devolucion',
                             'url'           => '#',
-                            'icon_color'    => 'black',
+                            'icon'          => 'cart-arrow-down',
+                            'icon_color'    => 'red',
                             'can'           => 'editar-factura',
                         ]);
                     }

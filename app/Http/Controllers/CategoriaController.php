@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Categoria;
 use Illuminate\Http\Request;
+use Kris\LaravelFormBuilder\FormBuilder;
+use Illuminate\Foundation\Auth\User;
+use Illuminate\Support\Facades\Auth;
 
 class CategoriaController extends Controller
 {
@@ -12,9 +15,24 @@ class CategoriaController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(FormBuilder $formBuilder)
     {
         //
+
+        $form = $formBuilder->create(\App\Forms\NuevaCategoriaForm::class, [
+            'method'    => 'POST',
+            'url'       => route('categoria.store')
+        ]);
+
+        $categorias = Categoria::paginate(20);
+
+        if ($categorias->isEmpty()) {
+            $categorias = false;
+        }
+
+        //dd($categorias, $form, $user->can('crear-producto'));
+
+        return view('admin.multiCategorias', compact('form', 'categorias'));
     }
 
     /**
@@ -33,9 +51,23 @@ class CategoriaController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(FormBuilder $formBuilder)
     {
         //
+        $form = $formBuilder->create(\App\Forms\NuevaCategoriaForm::class);
+
+        if (!$form->isValid()) {
+            return redirect()->back()->withErrors($form->getErrors())->withInput();
+        }
+
+        $input = $form->getFieldValues();
+        $record = new Categoria;
+        $record->descripcion = $input['descripcion'];
+        $record->codigo      = $input['codigo'];
+        $record->save();
+
+        return redirect()->route('categoria.index', 302);
+
     }
 
     /**

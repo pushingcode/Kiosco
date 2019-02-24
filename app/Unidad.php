@@ -18,8 +18,9 @@ class Unidad extends Model
         'created_at',
         'deleted_at'
       ];
-      //guardamos los campos para el log
-    protected static $logAtrributes = ['*'];
+      //guardamos solo el evento delete
+      protected static $recordEvents = ['deleted'];
+      protected static $logName = 'warning';
 
     public function productos()
     {
