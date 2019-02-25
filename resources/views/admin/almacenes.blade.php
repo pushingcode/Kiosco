@@ -80,6 +80,7 @@
 @stop
 
 @section('adminlte_js')
+<script src="{{ asset('vendor/adminlte/dist/js/adminlte.min.js') }}"></script>
     <script>
         $(document).on("click", "#cerrar-almacen", function (e){
             e.preventDefault();

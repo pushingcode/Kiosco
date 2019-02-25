@@ -121,7 +121,7 @@ return [
             'label'       => 4,
             'label_color' => 'success',
         ],*/
-        'ACCOUNT SETTINGS',
+        'AJUSTES DE CUENTA',
         [
             'text' => 'Profile',
             'url'  => 'admin/settings',
@@ -169,7 +169,7 @@ return [
                     'url'  => '#',
                 ],
             ],
-        ],
+        ]/*,
         'LABELS',
         [
             'text'       => 'Important',
@@ -182,7 +182,7 @@ return [
         [
             'text'       => 'Information',
             'icon_color' => 'aqua',
-        ],
+        ],*/
     ],
 
     /*

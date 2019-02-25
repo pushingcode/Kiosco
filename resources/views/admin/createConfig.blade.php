@@ -27,6 +27,7 @@
 @stop
 
 @section('adminlte_js')
+<script src="{{ asset('vendor/adminlte/dist/js/adminlte.min.js') }}"></script>
     <script>
     /*
     * ajuste de 12 meses para el form

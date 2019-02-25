@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Providers;
+
 use Illuminate\Contracts\Events\Dispatcher;
 use JeroenNoten\LaravelAdminLte\Events\BuildingMenu;
 use Illuminate\Support\ServiceProvider;
@@ -41,7 +42,7 @@ class AppServiceProvider extends ServiceProvider
                     'submenu'       => [
                         [
                             'text'          => 'Configuracion',
-                            'url'           => 'admin/config',
+                            'url'           => route('config'),
                             'icon'          => 'tools',
                             'can'           => 'crear-empresa'
                         ],
