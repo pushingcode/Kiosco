@@ -169,6 +169,13 @@ class EjercicioController extends Controller
         $input = $form->getFieldValues();
 
         if (!Hash::check($input['password'], Auth::user()->password)) {
+
+            activity('danger')
+            ->performedOn($ejercicio)
+            ->causedBy($user)
+            ->withProperties(['accion' => 'cierre ejercicio'])
+            ->log('Validacion NO aprobada');
+
             return redirect()->back()->withErrors('Password Incorrecto');
         }
         $date = Carbon::parse($ejercicio->fin);

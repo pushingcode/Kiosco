@@ -5,8 +5,9 @@ namespace App\Http\Controllers;
 use App\Categoria;
 use Illuminate\Http\Request;
 use Kris\LaravelFormBuilder\FormBuilder;
-use Illuminate\Foundation\Auth\User;
 use Illuminate\Support\Facades\Auth;
+use App\User;
+use Illuminate\Support\Facades\Hash;
 
 class CategoriaController extends Controller
 {
@@ -30,9 +31,12 @@ class CategoriaController extends Controller
             $categorias = false;
         }
 
-        //dd($categorias, $form, $user->can('crear-producto'));
+        $confirm = $formBuilder->create(\App\Forms\ConfirmActionForm::class, [
+            'method'    => 'POST',
+            'url'       => '' //se deja vacio porque se trabajara con JQuery
+        ]);
 
-        return view('admin.multiCategorias', compact('form', 'categorias'));
+        return view('admin.multiCategorias', compact('form', 'categorias', 'confirm'));
     }
 
     /**
@@ -66,7 +70,7 @@ class CategoriaController extends Controller
         $record->codigo      = $input['codigo'];
         $record->save();
 
-        return redirect()->route('categoria.index', 302);
+        return redirect()->route('categoria.index', [], 302);
 
     }
 
@@ -87,9 +91,27 @@ class CategoriaController extends Controller
      * @param  \App\Categoria  $categoria
      * @return \Illuminate\Http\Response
      */
-    public function edit(Categoria $categoria)
+    public function edit(FormBuilder $formBuilder, $id)
     {
         //
+        $categoria = Categoria::findOrFail($id);
+        $categoria->toArray();
+        $categorias = Categoria::paginate(20);
+        $form = $formBuilder->create(\App\Forms\EditarCategoriaForm::class, [
+            'method'    => 'POST',
+            'url'       => route('categoria.update', $categoria['id'])
+        ], [
+            'model'         => $categoria['id'],
+            'descripcion'   => $categoria['descripcion'],
+            'codigo'        => $categoria['codigo']
+        ]);
+
+        $confirm = $formBuilder->create(\App\Forms\ConfirmActionForm::class, [
+            'method'    => 'POST',
+            'url'       => '' //se deja vacio porque se trabajara con JQuery
+        ]);
+
+        return view('admin.multiCategorias', compact('form', 'categorias', 'confirm'));
     }
 
     /**
@@ -99,9 +121,18 @@ class CategoriaController extends Controller
      * @param  \App\Categoria  $categoria
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Categoria $categoria)
+    public function update(Categoria $categoria, FormBuilder $formBuilder)
     {
         //
+
+        $form = $formBuilder->create(\App\Forms\EditarCategoriaForm::class);
+        $input = $form->getFieldValues();
+        $categoria = Categoria::find($input['modelo']);
+        $categoria->descripcion = $input['descripcion'];
+        $categoria->codigo      = $input['codigo'];
+        $categoria->save();
+
+        return redirect()->route('categoria.index', [], 302);
     }
 
     /**
@@ -110,8 +141,32 @@ class CategoriaController extends Controller
      * @param  \App\Categoria  $categoria
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Categoria $categoria)
+    public function destroy(Categoria $categoria, FormBuilder $formBuilder)
     {
-        //
+        $user = User::find(Auth::id());
+        if (!$user->can('eliminar-empresa')) {
+            return redirect()->back()->withErrors('Permisos insuficientes');
+        }
+        $form = $formBuilder->create(\App\Forms\ConfirmActionForm::class);
+
+        if (!$form->isValid()) {
+            return redirect()->back()->withErrors($form->getErrors())->withInput();
+        }
+
+        $input = $form->getFieldValues();
+
+        if (!Hash::check($input['password'], Auth::user()->password)) {
+
+            activity('danger')
+            ->performedOn($categoria)
+            ->causedBy($user)
+            ->withProperties(['accion' => 'eliminar categoria'])
+            ->log('Validacion NO aprobada');
+
+            return redirect()->back()->withErrors('Password Incorrecto');
+        }
+
+        Categoria::destroy($input['objeto']);
+        return redirect()->route('categoria.index', [], 302);
     }
 }
