@@ -17,6 +17,9 @@ class CreateUnidadsTable extends Migration
             $table->increments('id');
             $table->string('descripcion');
             $table->string('unidad');
+            $table->integer('unidadesL1');
+            $table->integer('unidadesL2');
+            $table->enum('divisible', ['si', 'no']);
             $table->softDeletes();
             $table->timestamps();
         });

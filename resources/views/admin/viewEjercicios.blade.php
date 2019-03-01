@@ -24,7 +24,13 @@
             <td>{{ $ejercicio->inicio }}</td>
             <td>{{ $ejercicio->fin }}</td>
             <td>{{ $ejercicio->tipo }}</td>
-            <td>{{ $ejercicio->estado }}</td>
+            <td>
+                @if($ejercicio->estado == 'abierto')
+                    <span class="badge badge-success">{{ $ejercicio->estado }}</span>
+                @else
+                    <span class="badge badge-secondary">{{ $ejercicio->estado }}</span>
+                @endif
+            </td>
             <td>Estadisticas ejercicio</td>
             <td>
                 @if($ejercicio->estado === 'abierto')

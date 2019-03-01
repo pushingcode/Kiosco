@@ -59,6 +59,7 @@ class UsersTableSeeder extends Seeder
             ]);
         }
         
+        activity('success')->log('Creada Usuario: '. $value['user']);
         
     }
 
@@ -269,6 +270,7 @@ class RolesAndPermissionsSeeder extends Seeder
         
         $user->assignRole('superadmin');
 
+        activity('success')->log('Roles y Permisos creados y asignados a usuarios');
         //$role = Role::create(['name' => 'admin']);
         //$role->givePermissionTo(['publish articles', 'unpublish articles']);
     }

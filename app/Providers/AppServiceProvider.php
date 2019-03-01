@@ -134,7 +134,7 @@ class AppServiceProvider extends ServiceProvider
                         ]);
                         $event->menu->add([
                             'text'          => 'Crear Unidades',
-                            'url'           => '#',
+                            'url'           => 'unidad',
                             'icon'          => 'boxes',
                             'icon_color'    => 'aqua',
                             'can'           => 'crear-producto',

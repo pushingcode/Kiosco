@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'title' => 'AdminLTE 2',
+    'title' => 'KiozcoLTs',
 
     'title_prefix' => '',
 
@@ -45,7 +45,7 @@ return [
     |
     */
 
-    'skin' => 'blue',
+    'skin' => 'black',
 
     /*
     |--------------------------------------------------------------------------

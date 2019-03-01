@@ -35,15 +35,16 @@ class ConfigController extends Controller
             //$fisc = false;
             //verificamos que la empresa posee ejercicio
             $myconfig = $config->toArray();
+            //dd($myconfig);
             $ejer = Ejercicio::all();
             if ($ejer->isEmpty()) {
 
                 $fisc = $formBuilder->create(\App\Forms\ConFiscForm::class, [
                     'method' => 'GET',
-                    'url' => route('ejercicio.create', $myconfig['id']),
+                    'url' => route('ejercicio.create'),
                 ], [
                     'accion' => 'crear',
-                    'fiscal' => $myconfig['id']
+                    'fiscal' => $myconfig[0]['id']
                     ]);
             } else {
                 $fisc = false;
@@ -120,10 +121,10 @@ class ConfigController extends Controller
      * @param  \Kris\LaravelFormBuilder\FormBuilder  formBuilder
      * @return \Illuminate\Http\Response
      */
-    public function store(FormBuilder $formBuilder)
+    public function store(Config $config, FormBuilder $formBuilder)
     {
         //
-        
+        $user = User::find(Auth::id());
         $form = $formBuilder->create(\App\Forms\ConfigEmpresaForm::class);
 
         if (!$form->isValid()) {
@@ -141,7 +142,13 @@ class ConfigController extends Controller
 
         $record->save();
 
-        return redirect()->route('config', 302);
+        activity('success')
+            ->performedOn($config)
+            ->causedBy($user)
+            ->withProperties(['accion' => 'Empresa Creada'])
+            ->log('Creada Empresa: '. $input['empresa']);
+
+        return redirect()->route('config.index', [], 302);
 
     }
 
