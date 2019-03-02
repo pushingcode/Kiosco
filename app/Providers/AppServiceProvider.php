@@ -133,15 +133,15 @@ class AppServiceProvider extends ServiceProvider
                             'can'           => 'crear-producto',
                         ]);
                         $event->menu->add([
-                            'text'          => 'Crear Unidades',
+                            'text'          => 'Unidades',
                             'url'           => 'unidad',
                             'icon'          => 'boxes',
                             'icon_color'    => 'aqua',
                             'can'           => 'crear-producto',
                         ]);
                         $event->menu->add([
-                            'text'          => 'Crear Producto',
-                            'url'           => '#',
+                            'text'          => 'Productos',
+                            'url'           => 'producto',
                             'icon'          => 'box',
                             'icon_color'    => 'aqua',
                             'can'           => 'crear-producto',
