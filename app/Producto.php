@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Producto extends Model
 {
@@ -18,6 +19,19 @@ class Producto extends Model
         'created_at',
         'deleted_at'
       ];
-      //guardamos los campos para el log
-    protected static $logAtrributes = ['*'];
+
+    //guardamos solo el evento delete
+    protected static $recordEvents = ['deleted'];
+    protected static $logName = 'warning';
+
+    
+    public function categoria()
+    {
+      return $this->BelongsTo('App\Categoria');
+    }
+
+    public function unidad()
+    {
+      return $this->BelongsTo('App\Unidad');
+    }
 }

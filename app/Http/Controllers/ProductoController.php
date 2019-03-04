@@ -19,28 +19,27 @@ class ProductoController extends Controller
     {
         //preparamos el form
         $productos = Producto::paginate(15);
-
         if ($productos->isEmpty()) {
             $productos = false;
         }
         $data = array();
         $dato = array();
 
-        $categoria = Categoria::select('id', 'descripcion')->get();
+        $categoria = Categoria::select('id', 'descripcionC')->get();
         $categoria = $categoria->toArray();
         foreach ($categoria as $interno) {
-            $data[$interno['id']] = $interno['descripcion'];
+            $data[$interno['id']] = $interno['descripcionC'];
         }
 
-        $unidad = Unidad::select('id', 'descripcion')->get();
+        $unidad = Unidad::select('id', 'descripcionU')->get();
         $unidad = $unidad->toArray();
         foreach ($unidad as $interno) {
-            $dato[$interno['id']] = $interno['descripcion'];
+            $dato[$interno['id']] = $interno['descripcionU'];
         }
 
         $form = $formBuilder->create(\App\Forms\NuevoProductoForm::class, [
             'method'    => 'POST',
-            'url'       => route('categoria.store')
+            'url'       => route('producto.store')
         ], [
             'categoria' => $data,
             'unidad'    => $dato
@@ -71,9 +70,25 @@ class ProductoController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(FormBuilder $formBuilder)
     {
         //
+        $form = $formBuilder->create(\App\Forms\NuevoProductoForm::class);
+        if (!$form->isValid()) {
+            return redirect()->back()->withErrors($form->getErrors())->withInput();
+        }
+        $input = $form->getFieldValues();
+        $record = new Producto;
+        $record->categorias_id = $input['categoria'];
+        $record->unidads_id = $input['unidad'];
+        $record->descripcionP = $input['descripcion'];
+        $record->marca = $input['marca'];
+        $record->codigoP = $input['codigo'];
+        $record->sku = $input['sku'];
+        $record->save();
+
+        return redirect()->route('producto.index', [], 302);
+
     }
 
     /**
@@ -85,6 +100,7 @@ class ProductoController extends Controller
     public function show(Producto $producto)
     {
         //
+        
     }
 
     /**

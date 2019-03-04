@@ -61,7 +61,7 @@ class UnidadController extends Controller
 
         $record = new Unidad;
 
-        $record->descripcion    = $input['descripcion'];
+        $record->descripcionU   = $input['descripcion'];
         $record->unidad         = $input['unidad'];
         $record->unidadesL1     = $input['nivelL1'];
         $record->unidadesL2     = $input['nivelL2'];
@@ -100,7 +100,7 @@ class UnidadController extends Controller
             'url'       => route('unidad.update', $unidad['id'])
         ], [
             'model'         => $unidad['id'],
-            'descripcion'   => $unidad['descripcion'],
+            'descripcion'  => $unidad['descripcionU'],
             'unidad'        => $unidad['unidad'],
             'unidadL1'      => $unidad['unidadesL1'],
             'unidadL2'      => $unidad['unidadesL2'],
@@ -127,7 +127,7 @@ class UnidadController extends Controller
         $form = $formBuilder->create(\App\Forms\EditarUnidadForm::class);
         $input = $form->getFieldValues();
         $record = Unidad::find($input['modelo']);
-        $record->descripcion    = $input['descripcion'];
+        $record->descripcionU   = $input['descripcion'];
         $record->unidad         = $input['unidad'];
         $record->unidadesL1     = $input['nivelL1'];
         $record->unidadesL2     = $input['nivelL2'];

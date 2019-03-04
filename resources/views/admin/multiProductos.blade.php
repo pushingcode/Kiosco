@@ -10,6 +10,11 @@
     
     <div class="row">
         <div class="col-sm-8">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Gestion de unidades y empaques</h3>
+            </div>
+            <div class="panel-body">
         @if($form == false)
         @else
             {!! form($form) !!}
@@ -21,7 +26,9 @@
                 <tr>
                     <th>ID</th>
                     <th>Descripcion</th>
+                    <th>marca</th>
                     <th>Codigo</th>
+                    <th>SKU</th>
                     <th>Opciones</th>
                 </tr>
             </thead>
@@ -29,8 +36,10 @@
                 @foreach($productos as $producto)
                 <tr>
                     <td>{{ $producto->id }}</td>
-                    <td>{{ $producto->descripcion }}</td>
-                    <td>{{ $producto->codigo }}</td>
+                    <td>{{ $producto->descripcionP }}</td>
+                    <td>{{ $producto->marca }}</td>
+                    <td>{{ $producto->codigoP }}</td>
+                    <td>{{ $producto->sku }}</td>
                     <td>
                         <div class="btn-group" role="group" aria-label="botonera {{ $producto->codigo }} ">
                             <a class="btn btn-primary" href="{{ url('producto') }}/{{ $producto->id }}/edit" role="button"><i class="fas fa-pen-square"></i> Editar</a>
@@ -43,6 +52,9 @@
             </table>
             {{ $productos->links() }}
         @endif
+        </div>
+        </div>
+
         </div>
         <div class="col-sm-4">
         <h3>Dato importante</h3>

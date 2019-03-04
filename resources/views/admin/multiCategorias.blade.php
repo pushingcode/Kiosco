@@ -9,40 +9,49 @@
 @section('content')
     
     <div class="row">
-        <div class="col-sm-8">
-        @if($form == false)
-        @else
-            {!! form($form) !!}
-        @endif
-        <hr>
-        @if($categorias)
-            <table class="table">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Descripcion</th>
-                    <th>Codigo</th>
-                    <th>Opciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($categorias as $categoria)
-                <tr>
-                    <td>{{ $categoria->id }}</td>
-                    <td>{{ $categoria->descripcion }}</td>
-                    <td>{{ $categoria->codigo }}</td>
-                    <td>
-                        <div class="btn-group" role="group" aria-label="botonera {{ $categoria->codigo }} ">
-                            <a class="btn btn-primary" href="{{ url('categoria') }}/{{ $categoria->id }}/edit" role="button"><i class="fas fa-pen-square"></i> Editar</a>
-                            <a id="delete-categoria" class="btn btn-danger" role="button" href="#" data-toggle="modal" data-target="#deltCategory" data-objetivo="{{ $categoria->id }}" data-accion="{{ url('categoria/'. $categoria->id ) }}"><i class="fas fa-trash-alt"></i> Eliminar</a>
-                        </div>
-                    </td>
-                </tr>
-                @endforeach
-            </tbody>
-            </table>
-            {{ $categorias->links() }}
-        @endif
+        
+    <div class="col-sm-8">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Gestion de Categorias</h3>
+            </div>
+            <div class="panel-body">
+            @if($form == false)
+            @else
+                {!! form($form) !!}
+            @endif
+            <hr>
+            @if($categorias)
+                <table class="table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Descripcion</th>
+                        <th>Codigo</th>
+                        <th>Opciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($categorias as $categoria)
+                    <tr>
+                        <td>{{ $categoria->id }}</td>
+                        <td>{{ $categoria->descripcionC }}</td>
+                        <td>{{ $categoria->codigoC }}</td>
+                        <td>
+                            <div class="btn-group" role="group" aria-label="botonera {{ $categoria->codigo }} ">
+                                <a class="btn btn-primary" href="{{ url('categoria') }}/{{ $categoria->id }}/edit" role="button"><i class="fas fa-pen-square"></i> Editar</a>
+                                <a id="delete-categoria" class="btn btn-danger" role="button" href="#" data-toggle="modal" data-target="#deltCategory" data-objetivo="{{ $categoria->id }}" data-accion="{{ url('categoria/'. $categoria->id ) }}"><i class="fas fa-trash-alt"></i> Eliminar</a>
+                            </div>
+                        </td>
+                    </tr>
+                    @endforeach
+                </tbody>
+                </table>
+                {{ $categorias->links() }}
+            @endif
+            </div>
+        </div>
+        
         </div>
         <div class="col-sm-4">
         <h3>Dato importante</h3>

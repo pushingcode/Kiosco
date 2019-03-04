@@ -25,7 +25,7 @@ class CategoriaController extends Controller
             'url'       => route('categoria.store')
         ]);
 
-        $categorias = Categoria::paginate(20);
+        $categorias = Categoria::paginate(5);
 
         if ($categorias->isEmpty()) {
             $categorias = false;
@@ -66,8 +66,8 @@ class CategoriaController extends Controller
 
         $input = $form->getFieldValues();
         $record = new Categoria;
-        $record->descripcion = $input['descripcion'];
-        $record->codigo      = $input['codigo'];
+        $record->descripcionC = $input['descripcion'];
+        $record->codigoC      = $input['codigo'];
         $record->save();
 
         return redirect()->route('categoria.index', [], 302);
@@ -96,14 +96,14 @@ class CategoriaController extends Controller
         //
         $categoria = Categoria::findOrFail($id);
         $categoria->toArray();
-        $categorias = Categoria::paginate(20);
+        $categorias = Categoria::paginate(5);
         $form = $formBuilder->create(\App\Forms\EditarCategoriaForm::class, [
             'method'    => 'POST',
             'url'       => route('categoria.update', $categoria['id'])
         ], [
             'model'         => $categoria['id'],
-            'descripcion'   => $categoria['descripcion'],
-            'codigo'        => $categoria['codigo']
+            'descripcion'   => $categoria['descripcionC'],
+            'codigo'        => $categoria['codigoC']
         ]);
 
         $confirm = $formBuilder->create(\App\Forms\ConfirmActionForm::class, [
@@ -128,8 +128,8 @@ class CategoriaController extends Controller
         $form = $formBuilder->create(\App\Forms\EditarCategoriaForm::class);
         $input = $form->getFieldValues();
         $categoria = Categoria::find($input['modelo']);
-        $categoria->descripcion = $input['descripcion'];
-        $categoria->codigo      = $input['codigo'];
+        $categoria->descripcionC = $input['descripcion'];
+        $categoria->codigoC      = $input['codigo'];
         $categoria->save();
 
         return redirect()->route('categoria.index', [], 302);

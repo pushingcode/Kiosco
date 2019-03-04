@@ -7,49 +7,61 @@
 @stop
 
 @section('content')
-
-<div class="panel panel-default">
-    <div class="panel-heading">
-        <h3 class="panel-title">Gestion de unidades y empaques</h3>
-    </div>
-    <div class="panel-body">
-    {!! form($form) !!}
-    </div>
-    @if(!$unidades->isEmpty())
-     
-     <table class="table">
-        <thead>
-            <tr>
-                <th>Descripcion</th>
-                <th>Unidad</th>
-                <th>Nivel1</th>
-                <th>Nivel2</th>
-                <th>Divisible</th>
-                <th>Opciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach($unidades as $unidad)
-            <tr>
-                <td>{{ $unidad->descripcion }}</td>
-                <td>{{ $unidad->unidad }}</td>
-                <td>{{ $unidad->unidadesL1 }}</td>
-                <td>{{ $unidad->unidadesL2 }}</td>
-                <td>{{ $unidad->divisible }}</td>
-                <td>
-                <div class="btn-group" role="group" aria-label="botonera {{ $unidad->codigo }} ">
-                    <a class="btn btn-primary" href="{{ url('unidad') }}/{{ $unidad->id }}/edit" role="button"><i class="fas fa-pen-square"></i> Editar</a>
-                    <a id="delete-unidad" class="btn btn-danger" role="button" href="#" data-toggle="modal" data-target="#deltUnity" data-objetivo="{{ $unidad->id }}" data-accion="{{ url('unidad/'. $unidad->id ) }}"><i class="fas fa-trash-alt"></i> Eliminar</a>
-                </div>
-                </td>
-            </tr>
-            @endforeach
-        </tbody>
-     </table>
-@else 
+<div class="row">
+    <div class="col-sm-8">
     
-@endif
-</div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Gestion de unidades y empaques</h3>
+            </div>
+            <div class="panel-body">
+            {!! form($form) !!}
+            </div>
+            @if(!$unidades->isEmpty())
+            
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Descripcion</th>
+                        <th>Unidad</th>
+                        <th>Nivel1</th>
+                        <th>Nivel2</th>
+                        <th>Divisible</th>
+                        <th>Opciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($unidades as $unidad)
+                    <tr>
+                        <td>{{ $unidad->descripcionU }}</td>
+                        <td>{{ $unidad->unidad }}</td>
+                        <td>{{ $unidad->unidadesL1 }}</td>
+                        <td>{{ $unidad->unidadesL2 }}</td>
+                        <td>{{ $unidad->divisible }}</td>
+                        <td>
+                        <div class="btn-group" role="group" aria-label="botonera {{ $unidad->codigo }} ">
+                            <a class="btn btn-primary" href="{{ url('unidad') }}/{{ $unidad->id }}/edit" role="button"><i class="fas fa-pen-square"></i> Editar</a>
+                            <a id="delete-unidad" class="btn btn-danger" role="button" href="#" data-toggle="modal" data-target="#deltUnity" data-objetivo="{{ $unidad->id }}" data-accion="{{ url('unidad/'. $unidad->id ) }}"><i class="fas fa-trash-alt"></i> Eliminar</a>
+                        </div>
+                        </td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+            {{ $unidades->links() }}
+        @else 
+            
+        @endif
+            </div>
+        </div>
+        
+        <div class="col-sm-4">
+            <h3>Dato importante</h3>
+            @isset($decript)
+                <p>{{ $decript }}</p>
+            @endisset
+        </div>
+    </div>
 
     <!-- Modal -->
     <div class="modal fade" id="deltUnity" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">

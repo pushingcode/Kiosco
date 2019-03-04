@@ -17,9 +17,9 @@ class CreateProductosTable extends Migration
             $table->increments('id');
             $table->integer('categorias_id');
             $table->integer('unidads_id');
-            $table->string('descripcion');
+            $table->string('descripcionP');
             $table->string('marca');
-            $table->string('codigo');
+            $table->string('codigoP');
             $table->string('sku');
             $table->softDeletes();
             $table->timestamps();

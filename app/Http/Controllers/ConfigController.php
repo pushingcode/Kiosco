@@ -148,7 +148,7 @@ class ConfigController extends Controller
             ->withProperties(['accion' => 'Empresa Creada'])
             ->log('Creada Empresa: '. $input['empresa']);
 
-        return redirect()->route('config.index', [], 302);
+        return redirect()->route('config', [], 302);
 
     }
 
@@ -221,7 +221,7 @@ class ConfigController extends Controller
 
         $record->save();
 
-        return redirect()->route('config', 302);
+        return redirect()->route('config', [], 302);
     }
 
     /**

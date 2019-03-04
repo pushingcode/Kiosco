@@ -18,12 +18,13 @@ class Categoria extends Model
         'created_at',
         'deleted_at'
       ];
-      //guardamos solo el evento delete
-      protected static $recordEvents = ['deleted'];
-      protected static $logName = 'warning';
+    
+    //guardamos solo el evento delete
+    protected static $recordEvents = ['deleted'];
+    protected static $logName = 'warning';
 
     public function productos()
     {
-        return $this->hasMany('App\Producto');
+      return $this->hasMany('App\Producto');
     }
 }
