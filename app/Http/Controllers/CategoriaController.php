@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Categoria;
-use Illuminate\Http\Request;
+
 use Kris\LaravelFormBuilder\FormBuilder;
 use Illuminate\Support\Facades\Auth;
-use App\User;
 use Illuminate\Support\Facades\Hash;
+
+use App\Categoria;
+use App\User;
 
 class CategoriaController extends Controller
 {
@@ -160,13 +161,13 @@ class CategoriaController extends Controller
             activity('danger')
             ->performedOn($categoria)
             ->causedBy($user)
-            ->withProperties(['accion' => 'eliminar categoria'])
+            ->withProperties(['accion' => 'Eliminar categoria '. $categoria->descripcionC])
             ->log('Validacion NO aprobada');
 
             return redirect()->back()->withErrors('Password Incorrecto');
         }
 
-        Categoria::destroy($input['objeto']);
+        Categoria::destroy($categoria->id);
         return redirect()->route('categoria.index', [], 302);
     }
 }

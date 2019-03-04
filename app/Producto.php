@@ -27,11 +27,11 @@ class Producto extends Model
     
     public function categoria()
     {
-      return $this->BelongsTo('App\Categoria');
+      return $this->BelongsTo('App\Categoria', 'categorias_id');
     }
 
     public function unidad()
     {
-      return $this->BelongsTo('App\Unidad');
+      return $this->BelongsTo('App\Unidad', 'unidads_id');
     }
 }

@@ -2,11 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Producto;
-use Illuminate\Http\Request;
+
 use Kris\LaravelFormBuilder\FormBuilder;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+
+use App\Producto;
 use App\Categoria;
 use App\Unidad;
+use App\User;
 
 class ProductoController extends Controller
 {
@@ -109,9 +113,51 @@ class ProductoController extends Controller
      * @param  \App\Producto  $producto
      * @return \Illuminate\Http\Response
      */
-    public function edit(Producto $producto)
+    public function edit(Producto $producto, FormBuilder $formBuilder)
     {
         //
+        $data = array();
+        $dato = array();
+
+        $categoria = Categoria::select('id', 'descripcionC')->get();
+        $categoria = $categoria->toArray();
+        foreach ($categoria as $interno) {
+            $data[$interno['id']] = $interno['descripcionC'];
+        }
+
+        $unidad = Unidad::select('id', 'descripcionU')->get();
+        $unidad = $unidad->toArray();
+        foreach ($unidad as $interno) {
+            $dato[$interno['id']] = $interno['descripcionU'];
+        }
+
+        $productoA = Producto::find($producto->id);
+        $productoA->with('categoria', 'unidad');
+        $form = $formBuilder->create(\App\Forms\EditarProductoFrom::class, [
+            'method'    =>'POST',
+            'url'       =>route('producto.update', $producto->id)
+        ], [
+            'modelo'        => $producto->id,
+            'categoriaID'   => $producto->categoria->id,
+            'unidadID'      => $producto->unidad->id,
+            'descripcion'   => $producto->descripcionP,
+            'marca'         => $producto->marca,
+            'codigoP'       => $producto->codigoP,
+            'sku'           => $producto->sku,
+            'categoria'     => $data,
+            'unidad'        => $dato
+        ]);
+
+        $confirm = $formBuilder->create(\App\Forms\ConfirmActionForm::class, [
+            'method'    => 'POST',
+            'url'       => '' //se deja vacio porque se trabajara con JQuery
+        ]);
+
+        $productos = Producto::paginate(15);
+        if ($productos->isEmpty()) {
+            $productos = false;
+        }
+        return view('admin.multiProductos', compact('form', 'productos', 'confirm'));
     }
 
     /**
@@ -121,9 +167,26 @@ class ProductoController extends Controller
      * @param  \App\Producto  $producto
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Producto $producto)
+    public function update(Producto $producto, FormBuilder $formBuilder)
     {
         //
+        $form = $formBuilder->create(\App\Forms\EditarProductoFrom::class);
+        if (!$form->isValid()) {
+            return redirect()->back()->withErrors($form->getErrors())->withInput();
+        }
+
+        $input = $form->getFieldValues();
+
+        $record = Producto::find($producto->id);
+        $record->categorias_id = $input['categoria'];
+        $record->unidads_id = $input['unidad'];
+        $record->descripcionP = $input['descripcion'];
+        $record->marca = $input['marca'];
+        $record->codigoP = $input['codigo'];
+        $record->sku = $input['sku'];
+        $record->save();
+
+        return redirect()->route('producto.index', [], 302);
     }
 
     /**
@@ -132,8 +195,32 @@ class ProductoController extends Controller
      * @param  \App\Producto  $producto
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Producto $producto)
+    public function destroy(Producto $producto, FormBuilder $formBuilder)
     {
         //
+        $user = User::find(Auth::id());
+        if (!$user->can('eliminar-empresa')) {
+            return redirect()->back()->withErrors('Permisos insuficientes');
+        }
+        $form = $formBuilder->create(\App\Forms\ConfirmActionForm::class);
+
+        if (!$form->isValid()) {
+            return redirect()->back()->withErrors($form->getErrors())->withInput();
+        }
+
+        $input = $form->getFieldValues();
+        if (!Hash::check($input['password'], Auth::user()->password)) {
+
+            activity('danger')
+            ->performedOn($producto)
+            ->causedBy($user)
+            ->withProperties(['accion' => 'Eliminar producto '. $producto->descripcionP])
+            ->log('Validacion NO aprobada');
+
+            return redirect()->back()->withErrors('Password Incorrecto');
+        }
+
+        Categoria::destroy($producto->id);
+        return redirect()->route('producto.index', [], 302);
     }
 }
