@@ -135,6 +135,7 @@ return [
         [
             'text'    => 'Multilevel',
             'icon'    => 'share',
+            'can'     => 'ver-lista-usuario',
             'submenu' => [
                 [
                     'text' => 'Level One',

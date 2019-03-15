@@ -7,6 +7,14 @@
 @stop
 
 @section('content')
+
+@if($errors->any())
+<div class="alert alert-warning alert-dismissible" role="alert">
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+  <strong>Advertencia!</strong> {{$errors->first()}}.
+</div>
+@endif
+
 <div class="row">
     <div class="col-sm-8">
     
@@ -15,8 +23,20 @@
                 <h3 class="panel-title">Gestion de unidades y empaques</h3>
             </div>
             <div class="panel-body">
-            {!! form($form) !!}
-            </div>
+                <!-- Collapsible -->
+                <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseForm" aria-expanded="false" aria-controls="collapseForm">
+                {{ $collapsibleData['boton']}}
+                </button>
+                <hr>
+                <div class="collapse" id="collapseForm">
+                    <div class="well">
+                        @if($form == false)
+                        @else
+                            {!! form($form) !!}
+                        @endif
+                    </div>
+                </div>
+                <!-- EndCollapsible -->
             @if(!$unidades->isEmpty())
             
             <table class="table">
@@ -52,6 +72,8 @@
         @else 
             
         @endif
+            
+                </div>
             </div>
         </div>
         
@@ -96,5 +118,10 @@
         $(".modal-body").find('input[name="objeto"]').val(myObjetivo);
         $(".modal-body").find('input[name="accion"]').val(myAccion);
     });
+    </script>
+    <script>
+    $('#collapseForm').collapse({
+        toggle: {{ $collapsibleData['modo'] }}
+        });
     </script>
 @stop

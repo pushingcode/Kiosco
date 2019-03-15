@@ -8,7 +8,6 @@ use App\Config;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Auth\Access\Gate;
 use Kris\LaravelFormBuilder\FormBuilder;
 use Illuminate\Support\Carbon;
 
@@ -22,6 +21,11 @@ class EjercicioController extends Controller
     public function index(FormBuilder $formBuilder)
     {
         //
+        $user = User::find(Auth::id());
+        if (!$user->can('ver-lista-ejercicio')) {
+            return redirect()->back()->withErrors('Permisos insuficientes');
+        }
+
         $ejercicios = Ejercicio::all();
         //dd($ejercicios);
         $form = $formBuilder->create(\App\Forms\ConfirmActionForm::class, [
@@ -102,6 +106,7 @@ class EjercicioController extends Controller
             $ejercicio->estado      = $request->estado;
 
             $ejercicio->save();
+
             return redirect()
             ->back()
             ->with('creado ejercicio de '. $request->inicio .' al '. $request->fin);
@@ -156,7 +161,7 @@ class EjercicioController extends Controller
     {
         //
         $user = User::find(Auth::id());
-        if (!$user->can('eliminar-empresa')) {
+        if (!$user->can('eliminar-ejercicio')) {
             return redirect()->back()->withErrors('Permisos insuficientes');
         }
 

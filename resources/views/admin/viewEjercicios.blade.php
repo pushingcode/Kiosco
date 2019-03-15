@@ -7,6 +7,12 @@
 @stop
 
 @section('content')
+@if($errors->any())
+<div class="alert alert-warning alert-dismissible" role="alert">
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+  <strong>Advertencia!</strong> {{$errors->first()}}.
+</div>
+@endif
     <table class="table">
         <thead>
         <tr>
@@ -26,9 +32,9 @@
             <td>{{ $ejercicio->tipo }}</td>
             <td>
                 @if($ejercicio->estado == 'abierto')
-                    <span class="badge badge-success">{{ $ejercicio->estado }}</span>
+                    <span class="label label-success">{{ $ejercicio->estado }}</span>
                 @else
-                    <span class="badge badge-secondary">{{ $ejercicio->estado }}</span>
+                    <span class="label label-secondary">{{ $ejercicio->estado }}</span>
                 @endif
             </td>
             <td>Estadisticas ejercicio</td>

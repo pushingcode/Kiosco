@@ -21,6 +21,11 @@ class AlmacenController extends Controller
     public function index(FormBuilder $formBuilder)
     {
         //
+        $user = User::find(Auth::id());
+        if (!$user->can('ver-lista-almacen')) {
+            return redirect()->back()->withErrors('Permisos insuficientes');
+        }
+        
         $almacenes = Almacen::all();
 
         $form = $formBuilder->create(\App\Forms\ConfirmActionForm::class, [
@@ -40,6 +45,11 @@ class AlmacenController extends Controller
     public function create(FormBuilder $formBuilder)
     {
         //
+        $user = User::find(Auth::id());
+        if (!$user->can('crear-almacen')) {
+            return redirect()->back()->withErrors('Permisos insuficientes');
+        }
+
         $user = User::find(Auth::id());
         if (!$user->can('crear-empresa')) {
             return redirect()->back()->withErrors('Permisos insuficientes');
@@ -77,6 +87,10 @@ class AlmacenController extends Controller
     {
         //
         $user = User::find(Auth::id());
+        if (!$user->can('crear-almacen')) {
+            return redirect()->back()->withErrors('Permisos insuficientes');
+        }
+
         $form = $formBuilder->create(\App\Forms\NuevoAlmacenForm::class);
 
         if (!$form->isValid()) {
@@ -148,7 +162,7 @@ class AlmacenController extends Controller
         //
         
         $user = User::find(Auth::id());
-        if (!$user->can('eliminar-empresa')) {
+        if (!$user->can('eliminar-almacen')) {
             return redirect()->back()->withErrors('Permisos insuficientes');
         }
 

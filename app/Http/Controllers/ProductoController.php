@@ -22,6 +22,11 @@ class ProductoController extends Controller
     public function index(FormBuilder $formBuilder)
     {
         //preparamos el form
+        $user = User::find(Auth::id());
+        if (!$user->can('ver-lista-producto')) {
+            return redirect()->back()->withErrors('Permisos insuficientes');
+        }
+
         $productos = Producto::paginate(15);
         if ($productos->isEmpty()) {
             $productos = false;
@@ -54,7 +59,13 @@ class ProductoController extends Controller
             'url'       => '' //se deja vacio porque se trabajara con JQuery
         ]);
 
-        return view('admin.multiProductos', compact('form', 'productos', 'confirm'));
+        // configurando collapsible
+        $collapsibleData = array(
+            'modo'  => false,
+            'boton' => 'Crear Nuevo Producto'
+        );
+
+        return view('admin.multiProductos', compact('form', 'productos', 'confirm', 'collapsibleData'));
 
     }
 
@@ -66,6 +77,11 @@ class ProductoController extends Controller
     public function create()
     {
         //
+        $user = User::find(Auth::id());
+        if (!$user->can('crear-producto')) {
+            return redirect()->back()->withErrors('Permisos insuficientes');
+        }
+        
     }
 
     /**
@@ -77,6 +93,11 @@ class ProductoController extends Controller
     public function store(FormBuilder $formBuilder)
     {
         //
+        $user = User::find(Auth::id());
+        if (!$user->can('crear-producto')) {
+            return redirect()->back()->withErrors('Permisos insuficientes');
+        }
+
         $form = $formBuilder->create(\App\Forms\NuevoProductoForm::class);
         if (!$form->isValid()) {
             return redirect()->back()->withErrors($form->getErrors())->withInput();
@@ -116,6 +137,12 @@ class ProductoController extends Controller
     public function edit(Producto $producto, FormBuilder $formBuilder)
     {
         //
+        $user = User::find(Auth::id());
+        if (!$user->can('editar-producto')) {
+            return redirect()->back()->withErrors('Permisos insuficientes');
+        }
+
+
         $data = array();
         $dato = array();
 
@@ -157,7 +184,16 @@ class ProductoController extends Controller
         if ($productos->isEmpty()) {
             $productos = false;
         }
-        return view('admin.multiProductos', compact('form', 'productos', 'confirm'));
+        /**
+         * Configuracion de collapsible
+         * true = collapsible abierto para edit
+         * false = collapsible cerrado para index
+         */
+        $collapsibleData = array(
+            'modo'  => true,
+            'boton' => 'Editar Producto'
+        ); 
+        return view('admin.multiProductos', compact('form', 'productos', 'confirm', 'collapsibleData'));
     }
 
     /**
@@ -170,6 +206,11 @@ class ProductoController extends Controller
     public function update(Producto $producto, FormBuilder $formBuilder)
     {
         //
+        $user = User::find(Auth::id());
+        if (!$user->can('editar-producto')) {
+            return redirect()->back()->withErrors('Permisos insuficientes');
+        }
+
         $form = $formBuilder->create(\App\Forms\EditarProductoFrom::class);
         if (!$form->isValid()) {
             return redirect()->back()->withErrors($form->getErrors())->withInput();
@@ -199,6 +240,10 @@ class ProductoController extends Controller
     {
         //
         $user = User::find(Auth::id());
+        if (!$user->can('eliminar-producto')) {
+            return redirect()->back()->withErrors('Permisos insuficientes');
+        }
+
         if (!$user->can('eliminar-empresa')) {
             return redirect()->back()->withErrors('Permisos insuficientes');
         }

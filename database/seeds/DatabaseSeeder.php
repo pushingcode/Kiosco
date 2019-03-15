@@ -47,6 +47,21 @@ class UsersTableSeeder extends Seeder
                 'email'     => config('app.super_email'),
                 'password'  => bcrypt(config('app.super_password'))
                 ),
+        'usuario2' => array(
+                'user'      => 'testUserGerente',
+                'email'     => 'testusergerente@test.app',
+                'password'  => bcrypt('123456789')
+                ),
+        'usuario3' => array(
+                'user'      => 'testUserAlmacen',
+                'email'     => 'testuseralmacen@test.app',
+                'password'  => bcrypt('123456789')
+                ),
+        'usuario4' => array(
+                'user'      => 'testUserCaja',
+                'email'     => 'testusercaja@test.app',
+                'password'  => bcrypt('123456789')
+                ),
         ];
 
         foreach ($users as $value) {
@@ -78,30 +93,31 @@ class RolesAndPermissionsSeeder extends Seeder
         app()['cache']->forget('spatie.permission.cache');
 
         // create permissions
-
+        //EJERCICIO FISCAL-COMERCIAL
         Permission::create(['name' => 'crear-ejercicio']);
         Permission::create(['name' => 'editar-ejercicio']);
         Permission::create(['name' => 'eliminar-ejercicio']);
-
+        Permission::create(['name' => 'ver-lista-ejercicio']);
+        //GESTION PERMISOS
         Permission::create(['name' => 'crear-permisos']);
         Permission::create(['name' => 'editar-permisos']);
         Permission::create(['name' => 'eliminar-permisos']);
         Permission::create(['name' => 'ver-lista-permisos']);
-
+        //GESTION USUARIOS
         Permission::create(['name' => 'crear-usuario']);
         Permission::create(['name' => 'editar-usuario']);
         Permission::create(['name' => 'eliminar-usuario']);
         Permission::create(['name' => 'ver-lista-usuario']);
         Permission::create(['name' => 'activar-usuario']);
         Permission::create(['name' => 'desactivar-usuario']);
-
+        //GESTION PRODUCTOS
         Permission::create(['name' => 'crear-producto']);
         Permission::create(['name' => 'editar-producto']);
         Permission::create(['name' => 'eliminar-producto']);
         Permission::create(['name' => 'ver-lista-producto']);
         Permission::create(['name' => 'activar-producto']);
         Permission::create(['name' => 'desactivar-producto']);
-
+        //GESTION INVENTARIO
         Permission::create(['name' => 'crear-inventario']);
         Permission::create(['name' => 'ver-lista-inventario']);
         Permission::create(['name' => 'agregar-inventario']);
@@ -109,55 +125,61 @@ class RolesAndPermissionsSeeder extends Seeder
         Permission::create(['name' => 'eliminar-inventario']);
         Permission::create(['name' => 'activar-inventario']);
         Permission::create(['name' => 'desactivar-inventario']);
-
+        //GESTION IMPUESTOS
         Permission::create(['name' => 'crear-impuestos']);
         Permission::create(['name' => 'agregar-impuestos']);
         Permission::create(['name' => 'eliminar-impuestos']);
         Permission::create(['name' => 'ver-lista-impuestos']);
-
+        //DOCUMENTOS
         Permission::create(['name' => 'crear-documento']);
         Permission::create(['name' => 'editar-documento']);
         Permission::create(['name' => 'eliminar-documento']);
         Permission::create(['name' => 'ver-lista-documento']);
-
+        //DOC CREDITO
         Permission::create(['name' => 'crear-nota-credito']);
         Permission::create(['name' => 'editar-nota-credito']);
         Permission::create(['name' => 'eliminar-nota-credito']);
         Permission::create(['name' => 'ver-lista-nota-credito']);
-
+        //DOC DEBITO
         Permission::create(['name' => 'crear-nota-debito']);
         Permission::create(['name' => 'editar-nota-debito']);
         Permission::create(['name' => 'eliminar-nota-debito']);
         Permission::create(['name' => 'ver-lista-nota-debito']);
-
+        //DOC FACTURAS
         Permission::create(['name' => 'crear-factura']);
         Permission::create(['name' => 'editar-factura']);
         Permission::create(['name' => 'eliminar-factura']);
         Permission::create(['name' => 'ver-lista-factura']);
-
+        //DOC PRESUPUESTOS
         Permission::create(['name' => 'crear-presupuesto']);
         Permission::create(['name' => 'editar-presupuesto']);
         Permission::create(['name' => 'eliminar-presupuesto']);
         Permission::create(['name' => 'ver-lista-presupuesto']);
-
+        //GESTION COMPRAS
         Permission::create(['name' => 'crear-compra']);
         Permission::create(['name' => 'editar-compra']);
         Permission::create(['name' => 'eliminar-compra']);
         Permission::create(['name' => 'actualizar-compra']);
         Permission::create(['name' => 'ver-lista-compra']);
-        
+        //GESTION PEDIDOS
         Permission::create(['name' => 'crear-pedido']);
         Permission::create(['name' => 'editar-pedido']);
         Permission::create(['name' => 'eliminar-pedido']);
         Permission::create(['name' => 'actualizar-pedido']);
         Permission::create(['name' => 'ver-lista-pedido']);
-
+        //GESTION EMPRESA
         Permission::create(['name' => 'crear-empresa']);
         Permission::create(['name' => 'editar-empresa']);
         Permission::create(['name' => 'eliminar-empresa']);
         Permission::create(['name' => 'actualizar-empresa']);
         Permission::create(['name' => 'ver-lista-empresa']);
-
+        //GESTION ALMACEN
+        Permission::create(['name' => 'crear-almacen']);
+        Permission::create(['name' => 'editar-almacen']);
+        Permission::create(['name' => 'eliminar-almacen']);
+        Permission::create(['name' => 'actualizar-almacen']);
+        Permission::create(['name' => 'ver-lista-almacen']);
+        //GESTION CLIENTE
         Permission::create(['name' => 'crear-cliente']);
         Permission::create(['name' => 'editar-cliente']);
         Permission::create(['name' => 'eliminar-cliente']);
@@ -266,9 +288,17 @@ class RolesAndPermissionsSeeder extends Seeder
         ]);
 
 
-        $user = \App\User::find(1);
-        
-        $user->assignRole('superadmin');
+        $user1 = \App\User::find(1);
+        $user1->assignRole('superadmin');
+
+        $user2 = \App\User::find(2);
+        $user2->assignRole('gerencia');
+
+        $user3 = \App\User::find(3);
+        $user3->assignRole('almacen');
+
+        $user4 = \App\User::find(4);
+        $user4->assignRole('caja');
 
         activity('success')->log('Roles y Permisos creados y asignados a usuarios');
         //$role = Role::create(['name' => 'admin']);

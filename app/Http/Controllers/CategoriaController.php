@@ -20,6 +20,10 @@ class CategoriaController extends Controller
     public function index(FormBuilder $formBuilder)
     {
         //
+        $user = User::find(Auth::id());
+        if (!$user->can('ver-lista-producto')) {
+            return redirect()->back()->withErrors('Permisos insuficientes');
+        }
 
         $form = $formBuilder->create(\App\Forms\NuevaCategoriaForm::class, [
             'method'    => 'POST',
@@ -37,7 +41,17 @@ class CategoriaController extends Controller
             'url'       => '' //se deja vacio porque se trabajara con JQuery
         ]);
 
-        return view('admin.multiCategorias', compact('form', 'categorias', 'confirm'));
+        /**
+         * Configuracion de collapsible
+         * true = collapsible abierto para edit
+         * false = collapsible cerrado para index
+         */
+        $collapsibleData = array(
+            'modo'  => false,
+            'boton' => 'Crear Nueva Categoria'
+        );
+
+        return view('admin.multiCategorias', compact('form', 'categorias', 'confirm', 'collapsibleData'));
     }
 
     /**
@@ -48,6 +62,10 @@ class CategoriaController extends Controller
     public function create()
     {
         //
+        $user = User::find(Auth::id());
+        if (!$user->can('crear-producto')) {
+            return redirect()->back()->withErrors('Permisos insuficientes');
+        }
     }
 
     /**
@@ -59,6 +77,11 @@ class CategoriaController extends Controller
     public function store(FormBuilder $formBuilder)
     {
         //
+        $user = User::find(Auth::id());
+        if (!$user->can('crear-producto')) {
+            return redirect()->back()->withErrors('Permisos insuficientes');
+        }
+
         $form = $formBuilder->create(\App\Forms\NuevaCategoriaForm::class);
 
         if (!$form->isValid()) {
@@ -95,6 +118,11 @@ class CategoriaController extends Controller
     public function edit(FormBuilder $formBuilder, $id)
     {
         //
+        $user = User::find(Auth::id());
+        if (!$user->can('editar-producto')) {
+            return redirect()->back()->withErrors('Permisos insuficientes');
+        }
+        
         $categoria = Categoria::findOrFail($id);
         $categoria->toArray();
         $categorias = Categoria::paginate(5);
@@ -112,7 +140,17 @@ class CategoriaController extends Controller
             'url'       => '' //se deja vacio porque se trabajara con JQuery
         ]);
 
-        return view('admin.multiCategorias', compact('form', 'categorias', 'confirm'));
+        /**
+         * Configuracion de collapsible
+         * true = collapsible abierto para edit
+         * false = collapsible cerrado para index
+         */
+        $collapsibleData = array(
+            'modo'  => true,
+            'boton' => 'Editar Categoria'
+        );
+
+        return view('admin.multiCategorias', compact('form', 'categorias', 'confirm', 'collapsibleData'));
     }
 
     /**
@@ -125,6 +163,10 @@ class CategoriaController extends Controller
     public function update(Categoria $categoria, FormBuilder $formBuilder)
     {
         //
+        $user = User::find(Auth::id());
+        if (!$user->can('editar-producto')) {
+            return redirect()->back()->withErrors('Permisos insuficientes');
+        }
 
         $form = $formBuilder->create(\App\Forms\EditarCategoriaForm::class);
         $input = $form->getFieldValues();
@@ -145,9 +187,10 @@ class CategoriaController extends Controller
     public function destroy(Categoria $categoria, FormBuilder $formBuilder)
     {
         $user = User::find(Auth::id());
-        if (!$user->can('eliminar-empresa')) {
+        if (!$user->can('eliminar-producto')) {
             return redirect()->back()->withErrors('Permisos insuficientes');
         }
+        
         $form = $formBuilder->create(\App\Forms\ConfirmActionForm::class);
 
         if (!$form->isValid()) {

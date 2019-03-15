@@ -18,6 +18,11 @@ class UnidadController extends Controller
      */
     public function index(FormBuilder $formBuilder)
     {
+        $user = User::find(Auth::id());
+        if (!$user->can('ver-lista-producto')) {
+            return redirect()->back()->withErrors('Permisos insuficientes');
+        }
+
         $unidades = Unidad::paginate(15);
         //dd($unidades, $unidades->isEmpty());
         $form = $formBuilder->create(\App\Forms\NuevaUnidad::class, [
@@ -30,7 +35,17 @@ class UnidadController extends Controller
             'url'       => '' //se deja vacio porque se trabajara con JQuery
         ]);
 
-        return view('admin.multiUnidad', compact('form', 'unidades', 'confirm'));
+        /**
+         * Configuracion de collapsible
+         * true = collapsible abierto para edit
+         * false = collapsible cerrado para index
+         */
+        $collapsibleData = array(
+            'modo'  => false,
+            'boton' => 'Crear Nueva Unidad'
+        );
+
+        return view('admin.multiUnidad', compact('form', 'unidades', 'confirm', 'collapsibleData'));
     }
 
     /**
@@ -41,6 +56,10 @@ class UnidadController extends Controller
     public function create()
     {
         //
+        $user = User::find(Auth::id());
+        if (!$user->can('crear-producto')) {
+            return redirect()->back()->withErrors('Permisos insuficientes');
+        }
     }
 
     /**
@@ -52,6 +71,10 @@ class UnidadController extends Controller
     public function store(Unidad $unidad, FormBuilder $formBuilder)
     {
         $user = User::find(Auth::id());
+        if (!$user->can('crear-producto')) {
+            return redirect()->back()->withErrors('Permisos insuficientes');
+        }
+
         $form = $formBuilder->create(\App\Forms\NuevaUnidad::class);
         if (!$form->isValid()) {
             return redirect()->back()->withErrors($form->getErrors())->withInput();
@@ -92,6 +115,12 @@ class UnidadController extends Controller
     public function edit(FormBuilder $formBuilder, $id)
     {
         //
+
+        $user = User::find(Auth::id());
+        if (!$user->can('editar-producto')) {
+            return redirect()->back()->withErrors('Permisos insuficientes');
+        }
+
         $unidad = Unidad::findOrFail($id);
         $unidad = $unidad->toArray();
         $unidades = Unidad::paginate(15);
@@ -111,7 +140,17 @@ class UnidadController extends Controller
             'url'       => '' //se deja vacio porque se trabajara con JQuery
         ]);
 
-        return view('admin.multiUnidad', compact('form', 'unidades', 'confirm'));
+        /**
+         * Configuracion de collapsible
+         * true = collapsible abierto para edit
+         * false = collapsible cerrado para index
+         */
+        $collapsibleData = array(
+            'modo'  => true,
+            'boton' => 'Editar unidad'
+        );
+
+        return view('admin.multiUnidad', compact('form', 'unidades', 'confirm', 'collapsibleData'));
     }
 
     /**
@@ -124,6 +163,11 @@ class UnidadController extends Controller
     public function update(Unidad $unidad, FormBuilder $formBuilder)
     {
         //
+        $user = User::find(Auth::id());
+        if (!$user->can('editar-producto')) {
+            return redirect()->back()->withErrors('Permisos insuficientes');
+        }
+
         $form = $formBuilder->create(\App\Forms\EditarUnidadForm::class);
         $input = $form->getFieldValues();
         $record = Unidad::find($input['modelo']);
@@ -148,7 +192,7 @@ class UnidadController extends Controller
     {
         
         $user = User::find(Auth::id());
-        if (!$user->can('eliminar-empresa')) {
+        if (!$user->can('eliminar-producto')) {
             return redirect()->back()->withErrors('Permisos insuficientes');
         }
         
