@@ -9,6 +9,7 @@ use App\Config;
 use App\Ejercicio;
 use Carbon\Carbon;
 use App\Almacen;
+use App\Proveedor;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -77,6 +78,14 @@ class AppServiceProvider extends ServiceProvider
                         'can'           => 'crear-empresa',
                     ]);
                 }
+                //seccion proveedo
+                    $event->menu->add([
+                        'text'          => 'Proveedores',
+                        'url'           => '/proveedor',
+                        'icon'          => 'warehouse',
+                        'icon_color'    => 'green',
+                        'can'           => 'ver-lista-proveedor',
+                    ]);
                 
                 //verificamos si existe un ejercicio y creamos el menu
                 $fisc = Ejercicio::all();

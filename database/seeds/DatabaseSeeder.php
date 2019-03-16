@@ -125,6 +125,12 @@ class RolesAndPermissionsSeeder extends Seeder
         Permission::create(['name' => 'eliminar-inventario']);
         Permission::create(['name' => 'activar-inventario']);
         Permission::create(['name' => 'desactivar-inventario']);
+        //GESTION PROVEEDOR
+        Permission::create(['name' => 'crear-proveedor']);
+        Permission::create(['name' => 'ver-lista-proveedor']);
+        Permission::create(['name' => 'eliminar-proveedor']);
+        Permission::create(['name' => 'activar-proveedor']);
+        Permission::create(['name' => 'desactivar-proveedor']);
         //GESTION IMPUESTOS
         Permission::create(['name' => 'crear-impuestos']);
         Permission::create(['name' => 'agregar-impuestos']);
