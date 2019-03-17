@@ -16,6 +16,12 @@ class NuevoProveedor extends Form
         ->add('direccion', Field::TEXTAREA, ['rules'=>'required|min:3|max:100'])
         ->add('telefono', Field::TEXT, ['rules'=>'required'])
         ->add('email', Field::TEXT, ['rules'=>'required|email'])
+        ->add('estado', Field::SELECT, [
+            'choices'  => [
+                'activo'     => 'Activo', 
+                'inactivo'   => 'Inactivo'],
+            'selected' => 'seleccione'
+        ])
         ->add('submit', 'submit', [
             'attr'  => ['class' => 'btn btn-success'], 
             'label' => 'Crear'

@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Proveedor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\User;
 use Kris\LaravelFormBuilder\FormBuilder;
+use App\User;
+use App\Proveedor;
+use Kris\LaravelFormBuilder\Form;
 
 class ProveedorController extends Controller
 {
@@ -29,7 +30,7 @@ class ProveedorController extends Controller
         }
         $form = $formBuilder->create(\App\Forms\NuevoProveedor::class, [
             'method'    => 'POST',
-            'url'       => route('proveedor.create')
+            'url'       => route('proveedor.store')
         ]);
 
         $confirm = $formBuilder->create(\App\Forms\ConfirmActionForm::class, [
@@ -40,7 +41,7 @@ class ProveedorController extends Controller
         // configurando collapsible
         $collapsibleData = array(
             'modo'  => false,
-            'boton' => 'Crear Nuevo Producto'
+            'boton' => 'Crear Nuevo Proveedor'
         );
 
         return view('admin.multiProveedores', compact('form', 'proveedores', 'confirm', 'collapsibleData'));
@@ -63,9 +64,37 @@ class ProveedorController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(FormBuilder $formBuilder)
     {
         //
+        $user = User::find(Auth::id());
+        if (!$user->can('crear-proveedor')) {
+            return redirect()->back()->withErrors('Permisos insuficientes');
+        } 
+
+        $form = $formBuilder->create(\App\Forms\NuevoProveedor::class);
+        if (!$form->isValid()) {
+            $collapsibleData = array(
+                'modo'  => true,
+                'boton' => 'Crear Nuevo Producto'
+            );
+            return redirect()
+            ->back()
+            ->withErrors($form->getErrors())
+            ->withInput()
+            ->with('collapsibleData');
+        }
+
+        $input = $form->getFieldValues();
+        $record = new Proveedor;
+        $record->empresa    = $input['empresa'];
+        $record->cuit       = $input['cuit'];
+        $record->direccion  = $input['direccion'];
+        $record->telefono   = $input['telefono'];
+        $record->email      = $input['email'];
+        $record->save();
+
+        return redirect()->route('proveedor.index', [], 302);
     }
 
     /**
@@ -85,9 +114,47 @@ class ProveedorController extends Controller
      * @param  \App\Proveedor  $proveedor
      * @return \Illuminate\Http\Response
      */
-    public function edit(Proveedor $proveedor)
+    public function edit(Proveedor $proveedor, FormBuilder $formBuilder)
     {
         //
+        $user = User::find(Auth::id());
+        if (!$user->can('editar-proveedor')) {
+            return redirect()->back()->withErrors('Permisos insuficientes');
+        }
+        $proveedor = Proveedor::find($proveedor->id);
+        $form = $formBuilder->create(\App\Forms\EditarProveedorForm::class, [
+            'method'    => 'POST',
+            'url'       => route('proveedor.update', $proveedor->id)
+        ], [
+            'modelo'    => $proveedor->id,
+            'empresa'   => $proveedor->empresa,
+            'cuit'      => $proveedor->cuit,
+            'direccion' => $proveedor->direccion,
+            'telefono'  => $proveedor->telefono,
+            'email'     => $proveedor->email,
+            'estado'    => $proveedor->estado
+        ]);
+
+        $confirm = $formBuilder->create(\App\Forms\ConfirmActionForm::class, [
+            'method'    => 'POST',
+            'url'       => '' //se deja vacio porque se trabajara con JQuery
+        ]);
+
+        $proveedores = Proveedor::paginate(15);
+        if ($proveedores->isEmpty()) {
+            $proveedores = false;
+        }
+
+        /**
+         * Configuracion de collapsible
+         * true = collapsible abierto para edit
+         * false = collapsible cerrado para index
+         */
+        $collapsibleData = array(
+            'modo'  => true,
+            'boton' => 'Editar Proveedor'
+        ); 
+        return view('admin.multiProveedores', compact('form', 'proveedores', 'confirm', 'collapsibleData'));
     }
 
     /**

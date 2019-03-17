@@ -24,7 +24,7 @@
             <div class="panel-body">
             <!-- Collapsible -->
             <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseForm" aria-expanded="false" aria-controls="collapseForm">
-            {{ $collapsibleData['boton']}}
+            {{ $collapsibleData['boton'] }}
             </button>
             <hr>
             <div class="collapse" id="collapseForm">
@@ -116,8 +116,10 @@
     });
     </script>
 <script>
+    var collap = @json($collapsibleData);
+    console.log(collap.modo);
     $('#collapseForm').collapse({
-        toggle: {{ $collapsibleData['modo'] }}
+        toggle: collap.modo
     });
 </script>
 @stop

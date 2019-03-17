@@ -104,12 +104,12 @@ class ProductoController extends Controller
         }
         $input = $form->getFieldValues();
         $record = new Producto;
-        $record->categorias_id = $input['categoria'];
-        $record->unidads_id = $input['unidad'];
-        $record->descripcionP = $input['descripcion'];
-        $record->marca = $input['marca'];
-        $record->codigoP = $input['codigo'];
-        $record->sku = $input['sku'];
+        $record->categorias_id  = $input['categoria'];
+        $record->unidads_id     = $input['unidad'];
+        $record->descripcionP   = $input['descripcion'];
+        $record->marca          = $input['marca'];
+        $record->codigoP        = $input['codigo'];
+        $record->sku            = $input['sku'];
         $record->save();
 
         return redirect()->route('producto.index', [], 302);
@@ -161,8 +161,8 @@ class ProductoController extends Controller
         $productoA = Producto::find($producto->id);
         $productoA->with('categoria', 'unidad');
         $form = $formBuilder->create(\App\Forms\EditarProductoFrom::class, [
-            'method'    =>'POST',
-            'url'       =>route('producto.update', $producto->id)
+            'method'    => 'POST',
+            'url'       => route('producto.update', $producto->id)
         ], [
             'modelo'        => $producto->id,
             'categoriaID'   => $producto->categoria->id,
@@ -219,12 +219,12 @@ class ProductoController extends Controller
         $input = $form->getFieldValues();
 
         $record = Producto::find($producto->id);
-        $record->categorias_id = $input['categoria'];
-        $record->unidads_id = $input['unidad'];
-        $record->descripcionP = $input['descripcion'];
-        $record->marca = $input['marca'];
-        $record->codigoP = $input['codigo'];
-        $record->sku = $input['sku'];
+        $record->categorias_id  = $input['categoria'];
+        $record->unidads_id     = $input['unidad'];
+        $record->descripcionP   = $input['descripcion'];
+        $record->marca          = $input['marca'];
+        $record->codigoP        = $input['codigo'];
+        $record->sku            = $input['sku'];
         $record->save();
 
         return redirect()->route('producto.index', [], 302);

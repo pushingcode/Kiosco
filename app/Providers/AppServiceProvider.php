@@ -82,7 +82,7 @@ class AppServiceProvider extends ServiceProvider
                     $event->menu->add([
                         'text'          => 'Proveedores',
                         'url'           => '/proveedor',
-                        'icon'          => 'warehouse',
+                        'icon'          => 'handshake',
                         'icon_color'    => 'green',
                         'can'           => 'ver-lista-proveedor',
                     ]);
