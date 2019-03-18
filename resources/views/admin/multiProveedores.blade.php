@@ -58,8 +58,8 @@
                     <td>{{ $proveedor->email }}</td>
                     <td>
                         <div class="btn-group" role="group" aria-label="botonera {{ $proveedor->id }} ">
-                            <a class="btn btn-primary" href="{{ url('proveedor') }}/{{ $proveedor->id }}/edit" role="button"><i class="fas fa-pen-square"></i> Editar</a>
-                            <a id="delete-proveedor" class="btn btn-danger" role="button" href="#" data-toggle="modal" data-target="#deltProduct" data-objetivo="{{ $proveedor->id }}" data-accion="{{ url('proveedor/'. $proveedor->id ) }}"><i class="fas fa-trash-alt"></i> Eliminar</a>
+                            <a class="btn btn-primary btn-xs" href="{{ url('proveedor') }}/{{ $proveedor->id }}/edit" role="button"><i class="fas fa-pen-square"></i> Editar</a>
+                            <a id="delete-proveedor" class="btn btn-danger btn-xs" role="button" href="#" data-toggle="modal" data-target="#deltProduct" data-objetivo="{{ $proveedor->id }}" data-accion="{{ url('proveedor/'. $proveedor->id ) }}"><i class="fas fa-trash-alt"></i> Eliminar</a>
                         </div>
                     </td>
                 </tr>

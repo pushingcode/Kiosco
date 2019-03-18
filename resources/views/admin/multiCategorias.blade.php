@@ -55,8 +55,8 @@
                         <td>{{ $categoria->codigoC }}</td>
                         <td>
                             <div class="btn-group" role="group" aria-label="botonera {{ $categoria->codigo }} ">
-                                <a class="btn btn-primary" href="{{ url('categoria') }}/{{ $categoria->id }}/edit" role="button"><i class="fas fa-pen-square"></i> Editar</a>
-                                <a id="delete-categoria" class="btn btn-danger" role="button" href="#" data-toggle="modal" data-target="#deltCategory" data-objetivo="{{ $categoria->id }}" data-accion="{{ url('categoria/'. $categoria->id ) }}"><i class="fas fa-trash-alt"></i> Eliminar</a>
+                                <a class="btn btn-primary btn-xs" href="{{ url('categoria') }}/{{ $categoria->id }}/edit" role="button"><i class="fas fa-pen-square"></i> Editar</a>
+                                <a id="delete-categoria" class="btn btn-danger btn-xs" role="button" href="#" data-toggle="modal" data-target="#deltCategory" data-objetivo="{{ $categoria->id }}" data-accion="{{ url('categoria/'. $categoria->id ) }}"><i class="fas fa-trash-alt"></i> Eliminar</a>
                             </div>
                         </td>
                     </tr>

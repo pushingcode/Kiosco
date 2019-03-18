@@ -52,14 +52,14 @@
                 @foreach($productos as $producto)
                 <tr>
                     <td>{{ $producto->id }}</td>
-                    <td>{{ $producto->descripcionP }}</td>
-                    <td>{{ $producto->marca }}</td>
+                    <td>{{ strtoupper($producto->descripcionP) }}</td>
+                    <td>{{ strtoupper($producto->marca) }}</td>
                     <td>{{ $producto->codigoP }}</td>
-                    <td>{{ $producto->sku }}</td>
+                    <td>{{ strtoupper($producto->sku) }}</td>
                     <td>
                         <div class="btn-group" role="group" aria-label="botonera {{ $producto->codigo }} ">
-                            <a class="btn btn-primary" href="{{ url('producto') }}/{{ $producto->id }}/edit" role="button"><i class="fas fa-pen-square"></i> Editar</a>
-                            <a id="delete-producto" class="btn btn-danger" role="button" href="#" data-toggle="modal" data-target="#deltProduct" data-objetivo="{{ $producto->id }}" data-accion="{{ url('producto/'. $producto->id ) }}"><i class="fas fa-trash-alt"></i> Eliminar</a>
+                            <a class="btn btn-primary btn-xs" href="{{ url('producto') }}/{{ $producto->id }}/edit" role="button"><i class="fas fa-pen-square"></i> Editar</a>
+                            <a id="delete-producto" class="btn btn-danger btn-xs" role="button" href="#" data-toggle="modal" data-target="#deltProduct" data-objetivo="{{ $producto->id }}" data-accion="{{ url('producto/'. $producto->id ) }}"><i class="fas fa-trash-alt"></i> Eliminar</a>
                         </div>
                     </td>
                 </tr>

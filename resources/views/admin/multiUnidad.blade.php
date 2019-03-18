@@ -60,8 +60,8 @@
                         <td>{{ $unidad->divisible }}</td>
                         <td>
                         <div class="btn-group" role="group" aria-label="botonera {{ $unidad->codigo }} ">
-                            <a class="btn btn-primary" href="{{ url('unidad') }}/{{ $unidad->id }}/edit" role="button"><i class="fas fa-pen-square"></i> Editar</a>
-                            <a id="delete-unidad" class="btn btn-danger" role="button" href="#" data-toggle="modal" data-target="#deltUnity" data-objetivo="{{ $unidad->id }}" data-accion="{{ url('unidad/'. $unidad->id ) }}"><i class="fas fa-trash-alt"></i> Eliminar</a>
+                            <a class="btn btn-primary btn-xs" href="{{ url('unidad') }}/{{ $unidad->id }}/edit" role="button"><i class="fas fa-pen-square"></i> Editar</a>
+                            <a id="delete-unidad" class="btn btn-danger btn-xs" role="button" href="#" data-toggle="modal" data-target="#deltUnity" data-objetivo="{{ $unidad->id }}" data-accion="{{ url('unidad/'. $unidad->id ) }}"><i class="fas fa-trash-alt"></i> Eliminar</a>
                         </div>
                         </td>
                     </tr>
