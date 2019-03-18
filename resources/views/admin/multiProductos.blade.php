@@ -42,7 +42,7 @@
                 <tr>
                     <th>ID</th>
                     <th>Descripcion</th>
-                    <th>marca</th>
+                    <th>Marca</th>
                     <th>Codigo</th>
                     <th>SKU</th>
                     <th>Opciones</th>

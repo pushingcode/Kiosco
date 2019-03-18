@@ -5,11 +5,11 @@ namespace App\Providers;
 use Illuminate\Contracts\Events\Dispatcher;
 use JeroenNoten\LaravelAdminLte\Events\BuildingMenu;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Blade;
 use App\Config;
 use App\Ejercicio;
 use Carbon\Carbon;
 use App\Almacen;
-use App\Proveedor;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -20,7 +20,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(Dispatcher $events)
     {
-        //
+    
+        //Eventos para menus AdminLTE
         $events->listen(BuildingMenu::class, function (BuildingMenu $event){
             //verificamos si se ha configurado la aplicacion con 
             //informacion de la empresa y creado el ejercicio economico
