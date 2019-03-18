@@ -5,9 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Kris\LaravelFormBuilder\FormBuilder;
+use Illuminate\Support\Facades\Hash;
 use App\User;
 use App\Proveedor;
-use Kris\LaravelFormBuilder\Form;
 
 class ProveedorController extends Controller
 {
@@ -92,6 +92,7 @@ class ProveedorController extends Controller
         $record->direccion  = $input['direccion'];
         $record->telefono   = $input['telefono'];
         $record->email      = $input['email'];
+        $record->estado     = $input['estado'];
         $record->save();
 
         return redirect()->route('proveedor.index', [], 302);
@@ -164,9 +165,32 @@ class ProveedorController extends Controller
      * @param  \App\Proveedor  $proveedor
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Proveedor $proveedor)
+    public function update(Proveedor $proveedor, FormBuilder $formBuilder)
     {
         //
+        $user = User::find(Auth::id());
+        if (!$user->can('editar-proveedor')) {
+            return redirect()->back()->withErrors('Permisos insuficientes');
+        }
+
+        $form = $formBuilder->create(\App\Forms\EditarProveedorForm::class);
+        if (!$form->isValid()) {
+            return redirect()->back()->withErrors($form->getErrors())->withInput();
+        }
+
+        $input = $form->getFieldValues();
+
+        $record = Proveedor::find($proveedor->id);
+        $record->empresa    = $input['empresa'];
+        $record->cuit       = $input['cuit'];
+        $record->direccion  = $input['direccion'];
+        $record->telefono   = $input['telefono'];
+        $record->email      = $input['email'];
+        $record->estado     = $input['estado'];
+        $record->save();
+
+        return redirect()->route('proveedor.index', [], 302);
+
     }
 
     /**
@@ -175,8 +199,32 @@ class ProveedorController extends Controller
      * @param  \App\Proveedor  $proveedor
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Proveedor $proveedor)
+    public function destroy(Proveedor $proveedor, FormBuilder $formBuilder)
     {
         //
+        $user = User::find(Auth::id());
+        if (!$user->can('eliminar-proveedor')) {
+            return redirect()->back()->withErrors('Permisos insuficientes');
+        }
+
+        $form = $formBuilder->create(\App\Forms\ConfirmActionForm::class);
+
+        if (!$form->isValid()) {
+            return redirect()->back()->withErrors($form->getErrors())->withInput();
+        }
+
+        $input = $form->getFieldValues();
+        if (!Hash::check($input['password'], Auth::user()->password)) {
+
+            activity('danger')
+            ->performedOn($proveedor)
+            ->causedBy($user)
+            ->withProperties(['accion' => 'Eliminar proveedor '. $proveedor->empresa])
+            ->log('Validacion NO aprobada');
+
+            return redirect()->back()->withErrors('Password Incorrecto');
+        }
+        Proveedor::destroy($proveedor->id);
+        return redirect()->route('proveedor.index', [], 302);
     }
 }

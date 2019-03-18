@@ -244,9 +244,6 @@ class ProductoController extends Controller
             return redirect()->back()->withErrors('Permisos insuficientes');
         }
 
-        if (!$user->can('eliminar-empresa')) {
-            return redirect()->back()->withErrors('Permisos insuficientes');
-        }
         $form = $formBuilder->create(\App\Forms\ConfirmActionForm::class);
 
         if (!$form->isValid()) {
@@ -265,7 +262,7 @@ class ProductoController extends Controller
             return redirect()->back()->withErrors('Password Incorrecto');
         }
 
-        Categoria::destroy($producto->id);
+        Producto::destroy($producto->id);
         return redirect()->route('producto.index', [], 302);
     }
 }
