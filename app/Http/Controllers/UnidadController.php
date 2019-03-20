@@ -92,7 +92,9 @@ class UnidadController extends Controller
 
         $record->save();
 
-        return redirect()->route('unidad.index', [], 302);
+        return redirect()
+        ->route('unidad.index', [], 302)
+        ->with('success', 'Unidad creada');
     }
 
     /**
@@ -178,7 +180,9 @@ class UnidadController extends Controller
         $record->divisible      = $input['divisible'];
         $record->save();
 
-        return redirect()->route('unidad.index', [], 302);
+        return redirect()
+        ->route('unidad.index', [], 302)
+        ->with('info', 'Unidad editada');
         
     }
 
@@ -216,7 +220,9 @@ class UnidadController extends Controller
         }
 
         Unidad::destroy($input['objeto']);
-        return redirect()->route('unidad.index', [], 302);
+        return redirect()
+        ->route('unidad.index', [], 302)
+        ->with('info', 'Unidad eliminada');
 
     }
 }

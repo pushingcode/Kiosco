@@ -94,7 +94,9 @@ class CategoriaController extends Controller
         $record->codigoC      = $input['codigo'];
         $record->save();
 
-        return redirect()->route('categoria.index', [], 302);
+        return redirect()
+        ->route('categoria.index', [], 302)
+        ->with('success', 'Nueva categoria '.$input['descripcion'].' creada');
 
     }
 
@@ -175,7 +177,9 @@ class CategoriaController extends Controller
         $categoria->codigoC      = $input['codigo'];
         $categoria->save();
 
-        return redirect()->route('categoria.index', [], 302);
+        return redirect()
+        ->route('categoria.index', [], 302)
+        ->with('info', 'Categoria '.$input['descripcion'].' modificada');
     }
 
     /**
@@ -211,6 +215,8 @@ class CategoriaController extends Controller
         }
 
         Categoria::destroy($categoria->id);
-        return redirect()->route('categoria.index', [], 302);
+        return redirect()
+        ->route('categoria.index', [], 302)
+        ->with('info', 'Categoria '.$categoria->id.' eliminada');
     }
 }

@@ -148,7 +148,9 @@ class ConfigController extends Controller
             ->withProperties(['accion' => 'Empresa Creada'])
             ->log('Creada Empresa: '. $input['empresa']);
 
-        return redirect()->route('config', [], 302);
+        return redirect()
+        ->route('config', [], 302)
+        ->with('success', 'Empresa creada');
 
     }
 
@@ -221,7 +223,7 @@ class ConfigController extends Controller
 
         $record->save();
 
-        return redirect()->route('config', [], 302);
+        return redirect()->route('config', [], 302)->with('info', 'Empresa editada');
     }
 
     /**
@@ -253,6 +255,8 @@ class ConfigController extends Controller
         // espacio para capturar accion
         Config::destroy($id);
 
-        return redirect()->back()->with('Empresa eliminada!!!');
+        return redirect()
+        ->route('config', [], 302)
+        ->with('info', 'Empresa eliminada');
     }
 }

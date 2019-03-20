@@ -20,6 +20,11 @@ class Compra extends Model
         'deleted_at'
       ];
 
+    protected $cast = [
+      'id'      => 'int',
+      'payload' => 'array'
+    ];
+
     //guardamos solo el evento delete 01340195161953038912  25942169
     protected static $recordEvents = ['deleted'];
     protected static $logName = 'warning';

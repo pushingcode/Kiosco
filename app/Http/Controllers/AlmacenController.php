@@ -114,7 +114,7 @@ class AlmacenController extends Controller
         ->withProperties(['accion' => 'crear-almacen'])
         ->log('Nuevo almacen creado');
 
-        return redirect()->route('almacen.index', 302);
+        return redirect()->route('almacen.index', [], 302)->with('success', 'Nuevo almacen creado');
     }
 
     /**
@@ -194,6 +194,6 @@ class AlmacenController extends Controller
         ->withProperties(['accion' => 'cerrar-Almacen'])
         ->log('Almacen Cerrado');
 
-        return redirect()->route('almacen.index', 302);
+        return redirect()->route('almacen.index', [], 302)->with('info', 'Almacen '. $almacen->id .' eliminado');
     }
 }

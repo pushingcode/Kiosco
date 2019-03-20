@@ -95,7 +95,9 @@ class ProveedorController extends Controller
         $record->estado     = $input['estado'];
         $record->save();
 
-        return redirect()->route('proveedor.index', [], 302);
+        return redirect()
+        ->route('proveedor.index', [], 302)
+        ->with('success', 'Proveedor creado');
     }
 
     /**
@@ -189,7 +191,9 @@ class ProveedorController extends Controller
         $record->estado     = $input['estado'];
         $record->save();
 
-        return redirect()->route('proveedor.index', [], 302);
+        return redirect()
+        ->route('proveedor.index', [], 302)
+        ->with('info', 'Proveedor editado');
 
     }
 
@@ -225,6 +229,8 @@ class ProveedorController extends Controller
             return redirect()->back()->withErrors('Password Incorrecto');
         }
         Proveedor::destroy($proveedor->id);
-        return redirect()->route('proveedor.index', [], 302);
+        return redirect()
+        ->route('proveedor.index', [], 302)
+        ->with('info', 'Proveedor eliminado');
     }
 }

@@ -108,8 +108,8 @@ class EjercicioController extends Controller
             $ejercicio->save();
 
             return redirect()
-            ->back()
-            ->with('creado ejercicio de '. $request->inicio .' al '. $request->fin);
+            ->route('ejercicio.index', [], 302)
+            ->with('success', 'creado ejercicio de '. $request->inicio .' al '. $request->fin);
             
         } else {
             # code...
@@ -193,7 +193,7 @@ class EjercicioController extends Controller
         $ejercicio->save();
 
         return redirect()
-        ->route('ejercicio', 302)
-        ->with('Ejercicio economico '.$ejercicio->inicio.' cerrado de forma '. $ejercicio->tipo);
+        ->route('ejercicio.index', [], 302)
+        ->with('info', 'Ejercicio economico '.$ejercicio->inicio.' cerrado de forma '. $ejercicio->tipo);
     }
 }

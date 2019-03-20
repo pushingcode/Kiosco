@@ -39,4 +39,5 @@ Route::resources([
     'categoria' => 'CategoriaController',
     'producto'  => 'ProductoController',
     'proveedor' => 'ProveedorController',
+    'compra'    => 'CompraController',
 ]);

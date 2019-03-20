@@ -112,7 +112,9 @@ class ProductoController extends Controller
         $record->sku            = $input['sku'];
         $record->save();
 
-        return redirect()->route('producto.index', [], 302);
+        return redirect()
+        ->route('producto.index', [], 302)
+        ->with('success', 'Nuevo producto creado');
 
     }
 
@@ -227,7 +229,9 @@ class ProductoController extends Controller
         $record->sku            = $input['sku'];
         $record->save();
 
-        return redirect()->route('producto.index', [], 302);
+        return redirect()
+        ->route('producto.index', [], 302)
+        ->with('info', 'Producto editado');
     }
 
     /**
@@ -263,6 +267,8 @@ class ProductoController extends Controller
         }
 
         Producto::destroy($producto->id);
-        return redirect()->route('producto.index', [], 302);
+        return redirect()
+        ->route('producto.index', [], 302)
+        ->with('info', 'Producto eliminado');
     }
 }

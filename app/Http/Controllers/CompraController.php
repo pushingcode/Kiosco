@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Compra;
 use Illuminate\Http\Request;
+use App\UtilidadesClass\UtilidadesClass;
 
 class CompraController extends Controller
 {
@@ -15,6 +16,11 @@ class CompraController extends Controller
     public function index()
     {
         //
+        $check = UtilidadesClass::checkEjercicio();
+        if (!$check['estado']) {
+            return redirect()->back()->withErrors($check['razon']);
+        }
+
     }
 
     /**
